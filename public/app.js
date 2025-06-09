@@ -24,7 +24,7 @@ async function fetchCommanderImage(name) {
   }
 }
 
-function setupSocket() {
+function setupSocket(playerName, commanderName, commanderImage) {
   socket.on('gameCreated', (data) => {
     gameCode = data.gameCode;
     socket.emit('join', {
@@ -41,41 +41,21 @@ function setupSocket() {
     showGameScreen();
   });
 
-socket.on('players', (data) => {
-  const spotlight = document.getElementById('yourCommanderSpotlight');
-  const othersDiv = document.getElementById('otherCommanders');
+  socket.on('players', (data) => {
+    const playersDiv = document.getElementById('players');
+    playersDiv.innerHTML = data.players.map(p => `
+      <div style="margin-bottom: 10px;">
+        <p><strong>${p.name}</strong>: ${p.life} ${p.id === myId ? "(You)" : ""}</p>
+        ${p.commanderImage ? `<img src="${p.commanderImage}" alt="${p.commanderName}" width="100" style="border-radius: 8px;" />` : ""}
+      </div>
+    `).join('');
 
-  spotlight.innerHTML = '';
-  othersDiv.innerHTML = '';
-
-  console.log('Players received:', data.players); // 🔍 Debug image presence
-
-  data.players.forEach(p => {
-    const imageMarkup = p.commanderImage
-      ? `<img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}" title="${p.commanderName || 'Commander'}" />`
-      : `<div style="color: #888; font-size: 0.9rem;">No image available</div>`;
-
-    if (p.id === myId) {
-      spotlight.innerHTML = `
-        <h3>${p.name} (You)</h3>
-        ${imageMarkup}
-        <p>Life: ${p.life}</p>
-      `;
-      myLife = p.life;
-    } else {
-      const otherCard = document.createElement('div');
-      otherCard.innerHTML = `
-        <div><strong>${p.name}</strong></div>
-        ${imageMarkup}
-        <div>Life: ${p.life}</div>
-      `;
-      othersDiv.appendChild(otherCard);
+    const me = data.players.find(p => p.id === myId);
+    if (me) {
+      myLife = me.life;
     }
   });
-
-  const me = data.players.find(p => p.id === myId);
-  if (me) myLife = me.life;
-});
+}
 }
 
 function changeLife(amount) {
