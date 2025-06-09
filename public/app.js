@@ -41,39 +41,41 @@ function setupSocket() {
     showGameScreen();
   });
 
-  socket.on('players', (data) => {
-    const spotlight = document.getElementById('yourCommanderSpotlight');
-    const othersDiv = document.getElementById('otherCommanders');
+socket.on('players', (data) => {
+  const spotlight = document.getElementById('yourCommanderSpotlight');
+  const othersDiv = document.getElementById('otherCommanders');
 
-    spotlight.innerHTML = '';
-    othersDiv.innerHTML = '';
+  spotlight.innerHTML = '';
+  othersDiv.innerHTML = '';
 
-    data.players.forEach(p => {
-      const imgHTML = p.commanderImage
-        ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.commanderName}" />`
-        : '';
+  console.log('Players received:', data.players); // 🔍 Debug image presence
 
-      if (p.id === myId) {
-        spotlight.innerHTML = `
-          <h3>${p.name} (You)</h3>
-          ${imgHTML}
-          <p>Life: ${p.life}</p>
-        `;
-        myLife = p.life;
-      } else {
-        othersDiv.innerHTML += `
-          <div>
-            <div><strong>${p.name}</strong></div>
-            ${imgHTML}
-            <div>Life: ${p.life}</div>
-          </div>
-        `;
-      }
-    });
+  data.players.forEach(p => {
+    const imageMarkup = p.commanderImage
+      ? `<img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}" title="${p.commanderName || 'Commander'}" />`
+      : `<div style="color: #888; font-size: 0.9rem;">No image available</div>`;
 
-    const me = data.players.find(p => p.id === myId);
-    if (me) myLife = me.life;
+    if (p.id === myId) {
+      spotlight.innerHTML = `
+        <h3>${p.name} (You)</h3>
+        ${imageMarkup}
+        <p>Life: ${p.life}</p>
+      `;
+      myLife = p.life;
+    } else {
+      const otherCard = document.createElement('div');
+      otherCard.innerHTML = `
+        <div><strong>${p.name}</strong></div>
+        ${imageMarkup}
+        <div>Life: ${p.life}</div>
+      `;
+      othersDiv.appendChild(otherCard);
+    }
   });
+
+  const me = data.players.find(p => p.id === myId);
+  if (me) myLife = me.life;
+});
 }
 
 function changeLife(amount) {
