@@ -16,33 +16,25 @@ async function fetchCommanderImage(name) {
     const data = await res.json();
     return data.image_uris?.normal || data.card_faces?.[0]?.image_uris?.normal || '';
   } catch (e) {
-    console.error("Failed to fetch commander image", e);
+    console.error("❌ Failed to fetch commander image", e);
     return '';
   }
-}
-
-async function createGame(playerName, commanderName) {
-  const commanderImage = await fetchCommanderImage(commanderName);
-  socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(playerName, commanderName, commanderImage);
-  socket.emit('create');
-}
-
-async function joinGame(code, playerName, commanderName) {
-  if (!code || !playerName) {
-    alert('Missing game code or name.');
-    return;
-  }
-  const commanderImage = await fetchCommanderImage(commanderName);
-  socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(playerName, commanderName, commanderImage);
-  socket.emit('join', { gameCode: code, name: playerName, commanderName, commanderImage });
 }
 
 function setupSocket(playerName, commanderName, commanderImage) {
   socket.on('gameCreated', (data) => {
     gameCode = data.gameCode;
-    socket.emit('join', { gameCode, name: playerName, commanderName, commanderImage });
+    const name = prompt("Enter your name:");
+    const commander = prompt("Enter your commander's name:");
+    if (!name || !commander) return alert("Both name and commander are required.");
+    fetchCommanderImage(commander).then(image => {
+      socket.emit('join', {
+        gameCode,
+        name,
+        commanderName: commander,
+        commanderImage: image
+      });
+    });
   });
 
   socket.on('joined', (data) => {
@@ -82,19 +74,30 @@ function showGameScreen() {
 }
 
 function handleCreateGame() {
-  const name = prompt("Enter your name:");
-  const commander = prompt("Enter your commander's name:");
-  if (name && commander) createGame(name, commander);
+  socket = io('https://mtg-life-tracker-production.up.railway.app');
+  setupSocket(); // join will be triggered after game creation
+  socket.emit('create');
 }
 
-function handleJoinGame() {
+async function handleJoinGame() {
   const code = prompt("Enter game code:");
+  if (!code) return;
+
   const name = prompt("Enter your name:");
   const commander = prompt("Enter your commander's name:");
-  if (code && name && commander) joinGame(code, name, commander);
+  if (!name || !commander) return alert("Both name and commander are required.");
+
+  const image = await fetchCommanderImage(commander);
+
+  socket = io('https://mtg-life-tracker-production.up.railway.app');
+  setupSocket(name, commander, image);
+  socket.emit('join', {
+    gameCode: code.toUpperCase(),
+    name,
+    commanderName: commander,
+    commanderImage: image
+  });
 }
 
-window.createGame = createGame;
-window.joinGame = joinGame;
 window.handleCreateGame = handleCreateGame;
 window.handleJoinGame = handleJoinGame;
