@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('plus').onclick = () => changeLife(1);
 });
 
-function createGame() {
+function createGame(name) {
   socket = new WebSocket('ws://localhost:3000'); // or your Railway URL
   socket.onopen = () => {
     console.log('Creating game...');
@@ -17,7 +17,7 @@ function createGame() {
   setupSocket();
 }
 
-function joinGame() {
+function joinGame(gameCode, name) {
   const code = document.getElementById('gameCodeInput').value.trim().toUpperCase();
   const name = document.getElementById('nameInput').value.trim();
 
