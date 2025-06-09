@@ -74,25 +74,35 @@ function showGameScreen() {
 }
 
 function handleCreateGame() {
+  const name = document.getElementById('playerName').value.trim();
+  const commander = document.getElementById('commanderName').value.trim();
+
+  if (!name || !commander) {
+    alert("Please enter both your name and your commander's name.");
+    return;
+  }
+
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(); // join will be triggered after game creation
+  setupSocket(name, commander); // Will fetch image after game is created
   socket.emit('create');
 }
 
 async function handleJoinGame() {
-  const code = prompt("Enter game code:");
-  if (!code) return;
+  const code = document.getElementById('joinCode').value.trim().toUpperCase();
+  const name = document.getElementById('playerName').value.trim();
+  const commander = document.getElementById('commanderName').value.trim();
 
-  const name = prompt("Enter your name:");
-  const commander = prompt("Enter your commander's name:");
-  if (!name || !commander) return alert("Both name and commander are required.");
+  if (!code || !name || !commander) {
+    alert("Please enter game code, your name, and your commander's name.");
+    return;
+  }
 
   const image = await fetchCommanderImage(commander);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
   setupSocket(name, commander, image);
   socket.emit('join', {
-    gameCode: code.toUpperCase(),
+    gameCode: code,
     name,
     commanderName: commander,
     commanderImage: image
