@@ -32,17 +32,17 @@ io.on('connection', (socket) => {
     socket.emit('gameCreated', { gameCode });
   });
 
-  socket.on('join', ({ gameCode: code, name }) => {
-    gameCode = code;
-    const player = { id: playerId, name, life: 40 };
+ socket.on('join', ({ gameCode: code, name, commanderName, commanderImage }) => {
+  gameCode = code;
+  const player = { id: playerId, name, life: 40, commanderName, commanderImage };
 
-    if (!games[gameCode]) games[gameCode] = { players: [] };
-    games[gameCode].players.push(player);
+  if (!games[gameCode]) games[gameCode] = { players: [] };
+  games[gameCode].players.push(player);
 
-    socket.join(gameCode);
-    socket.emit('joined', { playerId, gameCode });
-    io.to(gameCode).emit('players', { players: games[gameCode].players });
-  });
+  socket.join(gameCode);
+  socket.emit('joined', { playerId, gameCode });
+  io.to(gameCode).emit('players', { players: games[gameCode].players });
+});
 
   socket.on('updateLife', ({ life }) => {
     const game = games[gameCode];
