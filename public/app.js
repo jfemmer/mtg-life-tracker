@@ -64,7 +64,7 @@ data.players.forEach(p => {
     myLife = p.life;
   } else {
     othersDiv.innerHTML += `
-      <div>
+      <div style="text-align: center;">
         <div><strong>${p.name}</strong></div>
         ${imgHTML}
         <div>Life: ${p.life}</div>
