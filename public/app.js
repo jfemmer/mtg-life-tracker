@@ -18,13 +18,10 @@ function createGame(name) {
 }
 
 function joinGame(gameCode, name) {
-  const code = document.getElementById('gameCodeInput').value.trim().toUpperCase();
-  const name = document.getElementById('nameInput').value.trim();
-
-  if (!code || !name) {
-    alert('Please enter both a game code and your name.');
-    return;
-  }
+  if (!gameCode || !name) {
+  alert('Missing game code or name.');
+  return;
+}
 
   socket = new WebSocket('ws://localhost:3000'); // or your deployed URL
   socket.onopen = () => {
@@ -34,7 +31,7 @@ function joinGame(gameCode, name) {
   setupSocket();
 }
 
-function setupSocket() {
+function setupSocket(playerName = '') {
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log('Socket message:', data);
@@ -42,14 +39,12 @@ function setupSocket() {
     if (data.type === 'gameCreated') {
       gameCode = data.gameCode;
 
-      // 👇 Grab name and immediately join as creator
-      const name = document.getElementById('nameInput').value.trim();
-      if (!name) {
-        alert('Enter your name before creating a game.');
+      if (!playerName) {
+        alert('Missing name for creator.');
         return;
       }
 
-      socket.send(JSON.stringify({ type: 'join', gameCode, name }));
+      socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
     }
 
     if (data.type === 'joined') {
@@ -71,7 +66,6 @@ function setupSocket() {
     }
   };
 }
-
 function showGameScreen() {
   document.getElementById('setup').style.display = 'none';
   document.getElementById('game').style.display = 'block';
