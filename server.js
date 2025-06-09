@@ -1,20 +1,20 @@
-const express = require('express');
-const http = require('http');
-const WebSocket = require('ws');
-const cors = require('cors');
-const { nanoid } = require('nanoid'); // ✅ Use require()
+import express from 'express';
+import http from 'http';
+import { WebSocketServer } from 'ws';
+import cors from 'cors';
+import { nanoid } from 'nanoid';
 
 const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocketServer({ server });
 
 const games = {}; // gameCode -> { players: [...] }
 
 wss.on('connection', (ws) => {
   let gameCode = null;
-  let playerId = nanoid();
+  const playerId = nanoid();
 
   ws.on('message', (msg) => {
     const data = JSON.parse(msg);
@@ -57,11 +57,13 @@ wss.on('connection', (ws) => {
   function broadcast(code) {
     const message = JSON.stringify({ type: 'players', players: games[code].players });
     wss.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
+      if (client.readyState === ws.OPEN) {
         client.send(message);
       }
     });
   }
 });
 
-server.listen(3000, () => console.log('✅ WebSocket server running on port 3000'));
+server.listen(process.env.PORT || 3000, () =>
+  console.log('✅ WebSocket server running')
+);
