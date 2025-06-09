@@ -64,6 +64,10 @@ wss.on('connection', (ws) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('✅ MTG Life Tracker backend is running');
+});
+
 server.listen(process.env.PORT || 3000, () =>
   console.log('✅ WebSocket server running')
 );
