@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function createGame(playerName) {
-  socket = new WebSocket('ws://localhost:3000');
+  socket = new WebSocket('mtg-life-tracker-production.up.railway.app');
   socket.onopen = () => {
     console.log('Creating game...');
     socket.send(JSON.stringify({ type: 'create' }));
@@ -23,7 +23,7 @@ function joinGame(gameCode, playerName) {
     return;
   }
 
-  socket = new WebSocket('ws://localhost:3000');
+  socket = new WebSocket('mtg-life-tracker-production.up.railway.app');
   socket.onopen = () => {
     console.log(`Joining game ${gameCode} as ${playerName}`);
     socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
