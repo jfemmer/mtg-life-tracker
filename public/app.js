@@ -44,19 +44,19 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('players', (data) => {
-    const yourDiv = document.getElementById('yourCommander');
+    const spotlight = document.getElementById('yourCommanderSpotlight');
 const othersDiv = document.getElementById('otherCommanders');
 
-yourDiv.innerHTML = '';
+spotlight.innerHTML = '';
 othersDiv.innerHTML = '';
 
 data.players.forEach(p => {
   const imgHTML = p.commanderImage
-    ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.name}: ${p.commanderName}" />`
+    ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.commanderName}" />`
     : '';
 
   if (p.id === myId) {
-    yourDiv.innerHTML = `
+    spotlight.innerHTML = `
       <h3>${p.name} (You)</h3>
       ${imgHTML}
       <p>Life: ${p.life}</p>
@@ -64,7 +64,7 @@ data.players.forEach(p => {
     myLife = p.life;
   } else {
     othersDiv.innerHTML += `
-      <div style="text-align: center;">
+      <div>
         <div><strong>${p.name}</strong></div>
         ${imgHTML}
         <div>Life: ${p.life}</div>
