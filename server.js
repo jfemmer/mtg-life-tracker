@@ -5,7 +5,11 @@ import cors from 'cors';
 import { nanoid } from 'nanoid';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ['https://jfemmer.github.io'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 const server = http.createServer(app);
 const io = new Server(server, {
