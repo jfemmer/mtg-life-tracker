@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const cors = require('cors');
-const { nanoid } = require('nanoid');
+const { nanoid } = await import('nanoid');
 
 const app = express();
 app.use(cors());
