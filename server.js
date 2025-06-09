@@ -1,73 +1,73 @@
 import express from 'express';
 import http from 'http';
-import { WebSocketServer } from 'ws';
 import cors from 'cors';
+import { Server } from 'socket.io';
 import { nanoid } from 'nanoid';
 
 const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
 
 const games = {}; // gameCode -> { players: [...] }
 
-wss.on('connection', (ws) => {
+io.on('connection', (socket) => {
   let gameCode = null;
   const playerId = nanoid();
 
-  ws.on('message', (msg) => {
-    const data = JSON.parse(msg);
+  console.log('⚡ New client connected:', playerId);
 
-    if (data.type === 'create') {
-      gameCode = nanoid(6).toUpperCase();
+  socket.on('create', () => {
+    gameCode = nanoid(6).toUpperCase();
+    games[gameCode] = { players: [] };
+    socket.emit('gameCreated', { gameCode });
+  });
+
+  socket.on('join', ({ gameCode: code, name }) => {
+    gameCode = code;
+    const player = { id: playerId, name, life: 40 };
+
+    if (!games[gameCode]) {
       games[gameCode] = { players: [] };
-      ws.send(JSON.stringify({ type: 'gameCreated', gameCode }));
     }
 
-    if (data.type === 'join') {
-      gameCode = data.gameCode;
-      const player = { id: playerId, name: data.name, life: 40 };
-      if (!games[gameCode]) {
-        games[gameCode] = { players: [] };
-      }
-      games[gameCode].players.push(player);
-      ws.send(JSON.stringify({ type: 'joined', playerId, gameCode }));
-      broadcast(gameCode);
-    }
+    games[gameCode].players.push(player);
+    socket.emit('joined', { playerId, gameCode });
+    broadcastPlayers(gameCode);
+  });
 
-    if (data.type === 'updateLife') {
-      const game = games[gameCode];
-      if (!game) return;
-      const player = game.players.find(p => p.id === playerId);
-      if (player) {
-        player.life = data.life;
-        broadcast(gameCode);
-      }
+  socket.on('updateLife', ({ life }) => {
+    const game = games[gameCode];
+    if (!game) return;
+    const player = game.players.find(p => p.id === playerId);
+    if (player) {
+      player.life = life;
+      broadcastPlayers(gameCode);
     }
   });
 
-  ws.on('close', () => {
+  socket.on('disconnect', () => {
     if (gameCode && games[gameCode]) {
       games[gameCode].players = games[gameCode].players.filter(p => p.id !== playerId);
-      broadcast(gameCode);
+      broadcastPlayers(gameCode);
     }
   });
 
-  function broadcast(code) {
-    const message = JSON.stringify({ type: 'players', players: games[code].players });
-    wss.clients.forEach(client => {
-      if (client.readyState === ws.OPEN) {
-        client.send(message);
-      }
-    });
+  function broadcastPlayers(code) {
+    io.emit('players', { players: games[code].players });
   }
 });
 
 app.get('/', (req, res) => {
-  res.send('✅ MTG Life Tracker backend is running');
+  res.send('Socket.IO MTG Life Tracker backend is running');
 });
 
 server.listen(process.env.PORT || 3000, () =>
-  console.log('✅ WebSocket server running')
+  console.log('✅ Socket.IO server running')
 );
