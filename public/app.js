@@ -4,6 +4,9 @@ let socket;
 let myId = null;
 let myLife = 40;
 let gameCode = null;
+let playerName = '';
+let commanderName = '';
+let commanderImage = '';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('minus').onclick = () => changeLife(-1);
@@ -21,19 +24,14 @@ async function fetchCommanderImage(name) {
   }
 }
 
-function setupSocket(playerName, commanderName, commanderImage) {
+function setupSocket() {
   socket.on('gameCreated', (data) => {
     gameCode = data.gameCode;
-    const name = prompt("Enter your name:");
-    const commander = prompt("Enter your commander's name:");
-    if (!name || !commander) return alert("Both name and commander are required.");
-    fetchCommanderImage(commander).then(image => {
-      socket.emit('join', {
-        gameCode,
-        name,
-        commanderName: commander,
-        commanderImage: image
-      });
+    socket.emit('join', {
+      gameCode,
+      name: playerName,
+      commanderName,
+      commanderImage
     });
   });
 
@@ -45,38 +43,36 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
   socket.on('players', (data) => {
     const spotlight = document.getElementById('yourCommanderSpotlight');
-const othersDiv = document.getElementById('otherCommanders');
+    const othersDiv = document.getElementById('otherCommanders');
 
-spotlight.innerHTML = '';
-othersDiv.innerHTML = '';
+    spotlight.innerHTML = '';
+    othersDiv.innerHTML = '';
 
-data.players.forEach(p => {
-  const imgHTML = p.commanderImage
-    ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.commanderName}" />`
-    : '';
+    data.players.forEach(p => {
+      const imgHTML = p.commanderImage
+        ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.commanderName}" />`
+        : '';
 
-  if (p.id === myId) {
-    spotlight.innerHTML = `
-      <h3>${p.name} (You)</h3>
-      ${imgHTML}
-      <p>Life: ${p.life}</p>
-    `;
-    myLife = p.life;
-  } else {
-    othersDiv.innerHTML += `
-      <div>
-        <div><strong>${p.name}</strong></div>
-        ${imgHTML}
-        <div>Life: ${p.life}</div>
-      </div>
-    `;
-  }
-});
+      if (p.id === myId) {
+        spotlight.innerHTML = `
+          <h3>${p.name} (You)</h3>
+          ${imgHTML}
+          <p>Life: ${p.life}</p>
+        `;
+        myLife = p.life;
+      } else {
+        othersDiv.innerHTML += `
+          <div>
+            <div><strong>${p.name}</strong></div>
+            ${imgHTML}
+            <div>Life: ${p.life}</div>
+          </div>
+        `;
+      }
+    });
 
     const me = data.players.find(p => p.id === myId);
-    if (me) {
-      myLife = me.life;
-    }
+    if (me) myLife = me.life;
   });
 }
 
@@ -94,39 +90,41 @@ function showGameScreen() {
   document.getElementById('plus').disabled = false;
 }
 
-function handleCreateGame() {
-  const name = document.getElementById('playerName').value.trim();
-  const commander = document.getElementById('commanderName').value.trim();
+async function handleCreateGame() {
+  playerName = document.getElementById('playerName').value.trim();
+  commanderName = document.getElementById('commanderName').value.trim();
 
-  if (!name || !commander) {
+  if (!playerName || !commanderName) {
     alert("Please enter both your name and your commander's name.");
     return;
   }
 
+  commanderImage = await fetchCommanderImage(commanderName);
+
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(name, commander); // Will fetch image after game is created
+  setupSocket();
   socket.emit('create');
 }
 
 async function handleJoinGame() {
-  const code = document.getElementById('joinCode').value.trim().toUpperCase();
-  const name = document.getElementById('playerName').value.trim();
-  const commander = document.getElementById('commanderName').value.trim();
+  gameCode = document.getElementById('joinCode').value.trim().toUpperCase();
+  playerName = document.getElementById('playerName').value.trim();
+  commanderName = document.getElementById('commanderName').value.trim();
 
-  if (!code || !name || !commander) {
+  if (!gameCode || !playerName || !commanderName) {
     alert("Please enter game code, your name, and your commander's name.");
     return;
   }
 
-  const image = await fetchCommanderImage(commander);
+  commanderImage = await fetchCommanderImage(commanderName);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(name, commander, image);
+  setupSocket();
   socket.emit('join', {
-    gameCode: code,
-    name,
-    commanderName: commander,
-    commanderImage: image
+    gameCode,
+    name: playerName,
+    commanderName,
+    commanderImage
   });
 }
 
