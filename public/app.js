@@ -100,3 +100,19 @@ window.handleJoinGame = function () {
   const name = prompt("Enter your name:");
   if (code && name) joinGame(code.trim().toUpperCase(), name.trim());
 };
+
+
+    function handleCreateGame() {
+      const name = prompt("Enter your name:");
+      if (name) {
+        createGame(name);
+      }
+    }
+
+    function handleJoinGame() {
+      const gameCode = prompt("Enter game code:");
+      const name = prompt("Enter your name:");
+      if (gameCode && name) {
+        joinGame(gameCode, name);
+      }
+    }
