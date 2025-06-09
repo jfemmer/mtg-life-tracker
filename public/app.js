@@ -13,8 +13,8 @@ function createGame(playerName) {
   socket.onopen = () => {
     console.log('Creating game...');
     socket.send(JSON.stringify({ type: 'create' }));
+    setupSocket(playerName); // ✅ move inside onopen
   };
-  setupSocket(playerName);
 }
 
 function joinGame(gameCode, playerName) {
@@ -27,8 +27,8 @@ function joinGame(gameCode, playerName) {
   socket.onopen = () => {
     console.log(`Joining game ${gameCode} as ${playerName}`);
     socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
+    setupSocket(playerName); // ✅ move inside onopen
   };
-  setupSocket(playerName);
 }
 
 function setupSocket(playerName = '') {
