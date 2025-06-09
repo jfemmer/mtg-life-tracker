@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
-import cors from 'cors';
 import { Server } from 'socket.io';
+import cors from 'cors';
 import { nanoid } from 'nanoid';
 
 const app = express();
@@ -10,18 +10,16 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: '*', // ✅ allow all origins (or lock to specific one)
     methods: ['GET', 'POST']
   }
 });
 
-const games = {}; // gameCode -> { players: [...] }
+const games = {};
 
 io.on('connection', (socket) => {
   let gameCode = null;
   const playerId = nanoid();
-
-  console.log('⚡ New client connected:', playerId);
 
   socket.on('create', () => {
     gameCode = nanoid(6).toUpperCase();
@@ -33,13 +31,12 @@ io.on('connection', (socket) => {
     gameCode = code;
     const player = { id: playerId, name, life: 40 };
 
-    if (!games[gameCode]) {
-      games[gameCode] = { players: [] };
-    }
-
+    if (!games[gameCode]) games[gameCode] = { players: [] };
     games[gameCode].players.push(player);
+
+    socket.join(gameCode);
     socket.emit('joined', { playerId, gameCode });
-    broadcastPlayers(gameCode);
+    io.to(gameCode).emit('players', { players: games[gameCode].players });
   });
 
   socket.on('updateLife', ({ life }) => {
@@ -48,24 +45,16 @@ io.on('connection', (socket) => {
     const player = game.players.find(p => p.id === playerId);
     if (player) {
       player.life = life;
-      broadcastPlayers(gameCode);
+      io.to(gameCode).emit('players', { players: game.players });
     }
   });
 
   socket.on('disconnect', () => {
     if (gameCode && games[gameCode]) {
       games[gameCode].players = games[gameCode].players.filter(p => p.id !== playerId);
-      broadcastPlayers(gameCode);
+      io.to(gameCode).emit('players', { players: games[gameCode].players });
     }
   });
-
-  function broadcastPlayers(code) {
-    io.emit('players', { players: games[code].players });
-  }
-});
-
-app.get('/', (req, res) => {
-  res.send('Socket.IO MTG Life Tracker backend is running');
 });
 
 server.listen(process.env.PORT || 3000, () =>
