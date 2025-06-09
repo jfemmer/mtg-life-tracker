@@ -68,22 +68,18 @@ function showGameScreen() {
   document.getElementById('plus').disabled = false;
 }
 
-// 👇 These must match your HTML onclick handlers
-window.createGame = createGame;
-window.joinGame = joinGame;
-
 function handleCreateGame() {
   const name = prompt("Enter your name:");
-  if (!name) return;
-  createGame(name);
+  if (name) createGame(name);
 }
 
 function handleJoinGame() {
   const code = prompt("Enter game code:");
   const name = prompt("Enter your name:");
-  if (!code || !name) return;
-  joinGame(code.toUpperCase(), name);
+  if (code && name) joinGame(code, name);
 }
 
+window.createGame = createGame;
+window.joinGame = joinGame;
 window.handleCreateGame = handleCreateGame;
 window.handleJoinGame = handleJoinGame;
