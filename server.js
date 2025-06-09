@@ -14,8 +14,9 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*', // ✅ allow all origins (or lock to specific one)
-    methods: ['GET', 'POST']
+    origin: ['https://jfemmer.github.io'],
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
