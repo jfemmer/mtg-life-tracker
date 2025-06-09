@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MTG Life Tracker</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; }
+    input, button { margin: 8px; padding: 10px; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>MTG Life Tracker</h1>
+
+  <div id="setup">
+    <button onclick="createGame()">Create Game</button>
+    <br><br>
+    <input id="gameCodeInput" placeholder="Enter Game Code" />
+    <input id="nameInput" placeholder="Your Name" />
+    <button onclick="joinGame()">Join Game</button>
+  </div>
+
+  <div id="game" style="display:none;">
+  <h2>Game: <span id="gameCodeDisplay"></span></h2>
+  <div id="players"></div>
+  <div>
+    <button id="minus" disabled>-1</button>
+    <button id="plus" disabled>+1</button>
+  </div>
+</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
