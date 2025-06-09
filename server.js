@@ -2,10 +2,11 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const cors = require('cors');
-const { nanoid } = await import('nanoid');
+const { nanoid } = require('nanoid'); // ✅ Use require()
 
 const app = express();
 app.use(cors());
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
@@ -25,14 +26,14 @@ wss.on('connection', (ws) => {
     }
 
     if (data.type === 'join') {
-        gameCode = data.gameCode;
-        const player = { id: playerId, name: data.name, life: 40 };
-        if (!games[gameCode]) {
-            games[gameCode] = { players: [] };
-        }
-        games[gameCode].players.push(player);
-        ws.send(JSON.stringify({ type: 'joined', playerId, gameCode })); // NEW: send back player ID
-        broadcast(gameCode);
+      gameCode = data.gameCode;
+      const player = { id: playerId, name: data.name, life: 40 };
+      if (!games[gameCode]) {
+        games[gameCode] = { players: [] };
+      }
+      games[gameCode].players.push(player);
+      ws.send(JSON.stringify({ type: 'joined', playerId, gameCode }));
+      broadcast(gameCode);
     }
 
     if (data.type === 'updateLife') {
