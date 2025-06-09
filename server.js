@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 
 const app = express();
 app.use(cors({
-  origin: 'https://jfemmer.github.io',
+  origin: ['https://jfemmer.github.io'],
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -14,7 +14,7 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://jfemmer.github.io',
+    origin: ['https://jfemmer.github.io'],
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -69,4 +69,4 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server listening on port ${PORT}`);
-});
+})
