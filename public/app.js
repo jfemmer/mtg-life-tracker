@@ -87,7 +87,12 @@ window.joinGame = joinGame;
 
 window.handleCreateGame = function () {
   const name = prompt("Enter your name:");
-  if (name) createGame(name.trim());
+  if (name) {
+    console.log("Creating game for:", name);
+    createGame(name.trim());
+  } else {
+    alert("Name is required to create a game.");
+  }
 };
 
 window.handleJoinGame = function () {
