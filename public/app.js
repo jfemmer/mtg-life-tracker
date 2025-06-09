@@ -14,7 +14,7 @@ function createGame(name) {
     console.log('Creating game...');
     socket.send(JSON.stringify({ type: 'create' }));
   };
-  setupSocket();
+  setupSocket(name);
 }
 
 function joinGame(gameCode, name) {
@@ -28,7 +28,7 @@ function joinGame(gameCode, name) {
     console.log(`Joining game ${code} as ${name}`);
     socket.send(JSON.stringify({ type: 'join', gameCode: code, name }));
   };
-  setupSocket();
+  setupSocket(name);
 }
 
 function setupSocket(playerName = '') {
