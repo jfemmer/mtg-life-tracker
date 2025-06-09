@@ -10,24 +10,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function createGame(playerName) {
   socket = new WebSocket('wss://mtg-life-tracker-production.up.railway.app');
+  
   socket.onopen = () => {
     console.log('Creating game...');
     socket.send(JSON.stringify({ type: 'create' }));
-    setupSocket(playerName); // ✅ move inside onopen
+    setupSocket(playerName);
+  };
+
+  socket.onerror = (err) => {
+    console.error('WebSocket error during create:', err);
+    alert('Failed to connect to game server.');
   };
 }
 
-function joinGame(gameCode, playerName) {
-  if (!gameCode || !playerName) {
+function joinGame(code, playerName) {
+  if (!code || !playerName) {
     alert('Missing game code or name.');
     return;
   }
 
   socket = new WebSocket('wss://mtg-life-tracker-production.up.railway.app');
+
   socket.onopen = () => {
-    console.log(`Joining game ${gameCode} as ${playerName}`);
-    socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
-    setupSocket(playerName); // ✅ move inside onopen
+    console.log(`Joining game ${code} as ${playerName}`);
+    socket.send(JSON.stringify({ type: 'join', gameCode: code, name: playerName }));
+    setupSocket(playerName);
+  };
+
+  socket.onerror = (err) => {
+    console.error('WebSocket error during join:', err);
+    alert('Failed to connect to game server.');
   };
 }
 
@@ -38,12 +50,10 @@ function setupSocket(playerName = '') {
 
     if (data.type === 'gameCreated') {
       gameCode = data.gameCode;
-
       if (!playerName) {
         alert('Missing name for creator.');
         return;
       }
-
       socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
     }
 
@@ -81,38 +91,22 @@ function changeLife(amount) {
   socket.send(JSON.stringify({ type: 'updateLife', life: myLife }));
 }
 
-// 🌐 Make these functions globally accessible for button clicks in HTML
-window.createGame = createGame;
-window.joinGame = joinGame;
-
+// 🌐 Hook up global button handlers
 window.handleCreateGame = function () {
   const name = prompt("Enter your name:");
   if (name) {
-    console.log("Creating game for:", name);
     createGame(name.trim());
   } else {
-    alert("Name is required to create a game.");
+    alert("Name is required.");
   }
 };
 
 window.handleJoinGame = function () {
   const code = prompt("Enter game code:");
   const name = prompt("Enter your name:");
-  if (code && name) joinGame(code.trim().toUpperCase(), name.trim());
+  if (code && name) {
+    joinGame(code.trim().toUpperCase(), name.trim());
+  } else {
+    alert("Both game code and name are required.");
+  }
 };
-
-
-    function handleCreateGame() {
-      const name = prompt("Enter your name:");
-      if (name) {
-        createGame(name);
-      }
-    }
-
-    function handleJoinGame() {
-      const gameCode = prompt("Enter game code:");
-      const name = prompt("Enter your name:");
-      if (gameCode && name) {
-        joinGame(gameCode, name);
-      }
-    }
