@@ -27,25 +27,5 @@
 
   <script src="app.js"></script>
 
-  <script>
-    function handleCreateGame() {
-      const name = prompt("Enter your name:");
-      if (name) {
-        createGame(name);
-      }
-    }
-
-    function handleJoinGame() {
-      const gameCode = prompt("Enter game code:");
-      const name = prompt("Enter your name:");
-      if (gameCode && name) {
-        joinGame(gameCode, name);
-      }
-    }
-
-    // You'll need to define createGame(name) and joinGame(gameCode, name)
-    // in your app.js to accept parameters instead of using DOM inputs
-  </script>
-
 </body>
 </html>
