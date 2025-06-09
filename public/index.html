@@ -20,12 +20,14 @@
   <button onclick="handleJoinGame()">Join Game</button>
 </div>
 
-  <div id="game" style="display:none;">
+  <div id="game" style="display: none;">
   <h2>Game Code: <span id="gameCodeDisplay"></span></h2>
 
-  <div id="yourCommander" class="commander-section"></div>
+  <!-- Spotlighted user's commander -->
+  <div id="yourCommanderSpotlight" class="spotlight-wrapper"></div>
 
-  <h3>Other Commanders</h3>
+  <!-- Separated section -->
+  <h3 style="margin-top: 40px;">Other Players</h3>
   <div id="otherCommanders" class="other-commander-grid"></div>
 
   <div>
