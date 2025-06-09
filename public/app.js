@@ -8,27 +8,27 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('plus').onclick = () => changeLife(1);
 });
 
-function createGame(name) {
+function createGame(playerName) {
   socket = new WebSocket('ws://localhost:3000');
   socket.onopen = () => {
     console.log('Creating game...');
     socket.send(JSON.stringify({ type: 'create' }));
   };
-  setupSocket(name);
+  setupSocket(playerName);
 }
 
-function joinGame(gameCode, name) {
-  if (!gameCode || !name) {
+function joinGame(gameCode, playerName) {
+  if (!gameCode || !playerName) {
     alert('Missing game code or name.');
     return;
   }
 
   socket = new WebSocket('ws://localhost:3000');
   socket.onopen = () => {
-    console.log(`Joining game ${gameCode} as ${name}`);
-    socket.send(JSON.stringify({ type: 'join', gameCode, name }));
+    console.log(`Joining game ${gameCode} as ${playerName}`);
+    socket.send(JSON.stringify({ type: 'join', gameCode, name: playerName }));
   };
-  setupSocket(name);
+  setupSocket(playerName);
 }
 
 function setupSocket(playerName = '') {
@@ -81,17 +81,17 @@ function changeLife(amount) {
   socket.send(JSON.stringify({ type: 'updateLife', life: myLife }));
 }
 
-// 🔓 Make functions globally accessible for HTML onclick
+// 🌐 Make these functions globally accessible for button clicks in HTML
 window.createGame = createGame;
 window.joinGame = joinGame;
 
 window.handleCreateGame = function () {
   const name = prompt("Enter your name:");
-  if (name) createGame(name);
+  if (name) createGame(name.trim());
 };
 
 window.handleJoinGame = function () {
-  const gameCode = prompt("Enter game code:");
+  const code = prompt("Enter game code:");
   const name = prompt("Enter your name:");
-  if (gameCode && name) joinGame(gameCode, name);
+  if (code && name) joinGame(code.trim().toUpperCase(), name.trim());
 };
