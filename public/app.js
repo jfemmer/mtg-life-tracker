@@ -44,13 +44,34 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('players', (data) => {
-    const playersDiv = document.getElementById('players');
-    playersDiv.innerHTML = data.players.map(p => `
-      <div style="margin-bottom: 10px;">
-        <p><strong>${p.name}</strong>: ${p.life} ${p.id === myId ? "(You)" : ""}</p>
-        ${p.commanderImage ? `<img src="${p.commanderImage}" alt="${p.commanderName}" width="100" style="border-radius: 8px;" />` : ""}
+    const yourDiv = document.getElementById('yourCommander');
+const othersDiv = document.getElementById('otherCommanders');
+
+yourDiv.innerHTML = '';
+othersDiv.innerHTML = '';
+
+data.players.forEach(p => {
+  const imgHTML = p.commanderImage
+    ? `<img src="${p.commanderImage}" alt="${p.commanderName}" title="${p.name}: ${p.commanderName}" />`
+    : '';
+
+  if (p.id === myId) {
+    yourDiv.innerHTML = `
+      <h3>${p.name} (You)</h3>
+      ${imgHTML}
+      <p>Life: ${p.life}</p>
+    `;
+    myLife = p.life;
+  } else {
+    othersDiv.innerHTML += `
+      <div>
+        <div><strong>${p.name}</strong></div>
+        ${imgHTML}
+        <div>Life: ${p.life}</div>
       </div>
-    `).join('');
+    `;
+  }
+});
 
     const me = data.players.find(p => p.id === myId);
     if (me) {
