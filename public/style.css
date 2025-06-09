@@ -1,8 +1,13 @@
+#yourCommander {
+  margin-top: 20px;
+}
+
 #yourCommander img {
   max-width: 300px;
+  width: 90%;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  margin: 20px auto;
+  margin: 10px auto;
 }
 
 .other-commander-grid {
