@@ -36,48 +36,45 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('joined', (data) => {
-  myId = data.playerId;
-  gameCode = data.gameCode;
+    myId = data.playerId;
+    gameCode = data.gameCode;
 
-  // If players hasn't arrived yet, store own player data directly
-  const me = data.player;
-  if (me) {
-    document.getElementById('yourCommanderSpotlight').innerHTML = `
-      <h3>${me.name} (${me.commanderName})</h3>
-      <img src="${me.commanderImage}" alt="${me.commanderName}" />
-      <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
-    `;
-  }
+    const me = data.player;
+    if (me) {
+      document.getElementById('yourCommanderSpotlight').innerHTML = `
+        <h3>${me.name} (${me.commanderName})</h3>
+        <img src="${me.commanderImage}" alt="${me.commanderName}" />
+        <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
+      `;
+    }
 
-  showGameScreen();
-});
+    showGameScreen();
+  });
 
-socket.on('players', (data) => {
-  const others = data.players.filter(p => p.id !== myId);
-  const me = data.players.find(p => p.id === myId);
+  socket.on('players', (data) => {
+    const others = data.players.filter(p => p.id !== myId);
+    const me = data.players.find(p => p.id === myId);
 
-  if (me) {
-    myLife = me.life;
-    document.getElementById('yourCommanderSpotlight').innerHTML = `
-      <h3>${me.name} (${me.commanderName})</h3>
-      <img src="${me.commanderImage}" alt="${me.commanderName}" />
-      <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
-    `;
-  }
+    if (me) {
+      myLife = me.life;
+      document.getElementById('yourCommanderSpotlight').innerHTML = `
+        <h3>${me.name} (${me.commanderName})</h3>
+        <img src="${me.commanderImage}" alt="${me.commanderName}" />
+        <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
+      `;
+    }
 
-  const commanderImgs = others.map(p => `
-    <div style="position: relative;">
-      <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-           title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-           style="width: 100%; border-radius: 8px;" />
-      <div class="life-overlay">${p.life}</div>
-    </div>
-  `).join('');
-  document.getElementById('otherCommanders').innerHTML = commanderImgs;
-});
-
+    const commanderImgs = others.map(p => `
+      <div style="position: relative;">
+        <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+             title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+             style="width: 100%; border-radius: 8px;" />
+        <div class="life-overlay">${p.life}</div>
+      </div>
+    `).join('');
+    document.getElementById('otherCommanders').innerHTML = commanderImgs;
+  });
 }
-
 
 function changeLife(amount) {
   myLife += amount;
@@ -105,10 +102,9 @@ async function handleCreateGame() {
   commanderImage = await fetchCommanderImage(commanderName);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(playerName, commanderName, commanderImage);  // ✅ FIXED
+  setupSocket(playerName, commanderName, commanderImage);
   socket.emit('create');
 }
-
 
 async function handleJoinGame() {
   gameCode = document.getElementById('joinCode').value.trim().toUpperCase();
@@ -122,60 +118,8 @@ async function handleJoinGame() {
 
   commanderImage = await fetchCommanderImage(commanderName);
 
-  // 💡 First set up socket
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-
-  // 💡 Then add listeners *after* socket is initialized
-  socket.on('joined', (data) => {
-    myId = data.playerId;
-    gameCode = data.gameCode;
-
-    const me = data.player;
-    if (me) {
-      document.getElementById('yourCommanderSpotlight').innerHTML = `
-        <h3>${me.name} (${me.commanderName})</h3>
-        <img src="${me.commanderImage}" alt="${me.commanderName}" />
-      `;
-    }
-
-    showGameScreen();
-  });
-
-  socket.on('players', (data) => {
-    const others = data.players.filter(p => p.id !== myId);
-    const me = data.players.find(p => p.id === myId);
-
-    if (me) {
-      myLife = me.life;
-      document.getElementById('yourCommanderSpotlight').innerHTML = `
-        <h3>${me.name} (${me.commanderName})</h3>
-        <img src="${me.commanderImage}" alt="${me.commanderName}" />
-      `;
-    }
-
-    const commanderImgs = others.map(p => `
-  <div style="position: relative;">
-    <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-         title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-         style="width: 100%; border-radius: 8px;" />
-    <div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: white;
-      text-shadow: 0 0 5px black;
-    ">
-      ${p.life}
-    </div>
-  </div>
-`).join('');
-    document.getElementById('otherCommanders').innerHTML = commanderImgs;
-  });
-
-  // ✅ Finally emit the join event
+  setupSocket(playerName, commanderName, commanderImage);
   socket.emit('join', {
     gameCode,
     name: playerName,
