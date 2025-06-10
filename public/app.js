@@ -36,10 +36,20 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('joined', (data) => {
-    myId = data.playerId;
-    gameCode = data.gameCode;
-    showGameScreen();
-  });
+  myId = data.playerId;
+  gameCode = data.gameCode;
+
+  // If players hasn't arrived yet, store own player data directly
+  const me = data.player;
+  if (me) {
+    document.getElementById('yourCommanderSpotlight').innerHTML = `
+      <h3>${me.name} (${me.commanderName})</h3>
+      <img src="${me.commanderImage}" alt="${me.commanderName}" />
+    `;
+  }
+
+  showGameScreen();
+});
 
   socket.on('players', (data) => {
   const others = data.players.filter(p => p.id !== myId);
