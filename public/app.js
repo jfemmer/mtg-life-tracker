@@ -62,14 +62,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
     if (me) {
       myLife = me.life;
       document.getElementById('yourCommanderSpotlight').innerHTML = `
-  <div class="commander-spotlight">
-    <h3>${me.name} (${me.commanderName})</h3>
-    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      <div class="life-overlay">${me.life}</div>
-    </div>
-  </div>
-`;
+        <h3>${me.name} (${me.commanderName})</h3>
+        <img src="${me.commanderImage}" alt="${me.commanderName}" />
+        <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
+      `;
     }
 
     const commanderImgs = others.map(p => {
@@ -137,6 +133,14 @@ async function handleJoinGame() {
     commanderName,
     commanderImage
   });
+
+  // ⬇️ Fallback to show the game screen if 'joined' event doesn't fire
+  setTimeout(() => {
+    const alreadyVisible = document.getElementById('game').style.display === 'block';
+    if (!alreadyVisible) {
+      showGameScreen();
+    }
+  }, 1000); // 1 second delay as buffer
 }
 
 window.handleCreateGame = handleCreateGame;
