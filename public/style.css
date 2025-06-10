@@ -84,14 +84,10 @@ h2, h3 {
 
 /* Commander Image */
 .commander-img {
-  width: 100%;
+  width: 75%;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   transition: transform 0.2s ease;
-}
-
-.commander-img:hover {
-  transform: scale(1.08);
 }
 
 /* Input Fields */
