@@ -122,9 +122,15 @@ async function handleJoinGame() {
   commanderImage = await fetchCommanderImage(commanderName);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-
-  // 🔥 Use setupSocket, which includes the emit('join') logic
   setupSocket(playerName, commanderName, commanderImage);
+
+  // 👇 Manually emit the join event
+  socket.emit('join', {
+    gameCode,
+    name: playerName,
+    commanderName,
+    commanderImage
+  });
 }
 
 window.handleCreateGame = handleCreateGame;
