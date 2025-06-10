@@ -120,10 +120,11 @@ h2, h3 {
   pointer-events: none;
 }
 
-/* Dead Player Styling */
 .commander-container.dead {
   filter: grayscale(100%);
   border: 3px solid red !important;
+  background: linear-gradient(to bottom right, #440000, #220000); /* dark red tint */
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); /* red glow */
   position: relative;
 }
 
@@ -138,6 +139,10 @@ h2, h3 {
   width: 32px;
   height: 32px;
   z-index: 5;
+
+  /* red glow behind skull */
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.5);
+  border-radius: 50%;
 }
 
 /* Setup screen */
