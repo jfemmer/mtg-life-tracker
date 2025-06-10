@@ -94,9 +94,10 @@ async function handleCreateGame() {
   commanderImage = await fetchCommanderImage(commanderName);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket();
+  setupSocket(playerName, commanderName, commanderImage);  // ✅ FIXED
   socket.emit('create');
 }
+
 
 async function handleJoinGame() {
   gameCode = document.getElementById('joinCode').value.trim().toUpperCase();
@@ -111,7 +112,7 @@ async function handleJoinGame() {
   commanderImage = await fetchCommanderImage(commanderName);
 
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket();
+  setupSocket(playerName, commanderName, commanderImage);  // ✅ FIXED
   socket.emit('join', {
     gameCode,
     name: playerName,
