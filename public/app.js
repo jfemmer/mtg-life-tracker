@@ -1,4 +1,4 @@
-import { io } from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js';
+import { io } from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js'; 
 
 let socket;
 let myId = null;
@@ -33,6 +33,13 @@ function setupSocket(playerName, commanderName, commanderImage) {
       commanderName,
       commanderImage
     });
+
+    // Fallback: force show game screen after 1s in case 'joined' isn't emitted
+    setTimeout(() => {
+      if (document.getElementById('game').style.display === 'none') {
+        showGameScreen();
+      }
+    }, 1000);
   });
 
   socket.on('joined', (data) => {
@@ -41,15 +48,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     const me = data.player;
     if (me) {
-      document.getElementById('yourCommanderSpotlight').innerHTML = `
-  <div class="commander-spotlight">
-    <h3>${me.name} (${me.commanderName})</h3>
-    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      <div class="life-overlay">${me.life}</div>
-    </div>
-  </div>
-`;
+      document.getElementById('yourCommanderSpotlight').innerHTML = commanderHtml(me);
     }
 
     showGameScreen();
@@ -61,35 +60,29 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     if (me) {
       myLife = me.life;
-      document.getElementById('yourCommanderSpotlight').innerHTML = `
-  <div class="commander-spotlight">
-    <h3>${me.name} (${me.commanderName})</h3>
-    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      <div class="life-overlay">${me.life}</div>
-    </div>
-  </div>
-`;
+      document.getElementById('yourCommanderSpotlight').innerHTML = commanderHtml(me);
     }
 
-    const commanderImgs = others.map(p => {
-      const isDead = p.life <= 0;
-      return `
-        <div class="commander-container${isDead ? ' dead' : ''}">
-          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-              class="commander-img" />
-          <div class="life-overlay">${p.life}</div>
-        </div>
-      `;
-    }).join('');
+    const commanderImgs = others.map(p => commanderHtml(p)).join('');
     document.getElementById('otherCommanders').innerHTML = commanderImgs;
   });
 }
 
+function commanderHtml(p) {
+  const isDead = p.life <= 0;
+  return `
+    <div class="commander-spotlight">
+      <h3>${p.name} (${p.commanderName})</h3>
+      <div class="commander-container${isDead ? ' dead' : ''}">
+        <img src="${p.commanderImage}" alt="${p.commanderName}" class="commander-img" />
+        <div class="life-overlay">${p.life}</div>
+      </div>
+    </div>
+  `;
+}
+
 function changeLife(amount) {
   myLife += amount;
-  console.log(`Life changed to ${myLife}`);
   socket.emit('updateLife', { life: myLife });
 }
 
@@ -111,7 +104,6 @@ async function handleCreateGame() {
   }
 
   commanderImage = await fetchCommanderImage(commanderName);
-
   socket = io('https://mtg-life-tracker-production.up.railway.app');
   setupSocket(playerName, commanderName, commanderImage);
   socket.emit('create');
@@ -128,8 +120,8 @@ async function handleJoinGame() {
   }
 
   commanderImage = await fetchCommanderImage(commanderName);
-
   socket = io('https://mtg-life-tracker-production.up.railway.app');
+
   socket.on('connect', () => {
     setupSocket(playerName, commanderName, commanderImage);
     socket.emit('join', {
@@ -138,7 +130,15 @@ async function handleJoinGame() {
       commanderName,
       commanderImage
     });
+
+    // Fallback for join in case 'joined' isn't fired
+    setTimeout(() => {
+      if (document.getElementById('game').style.display === 'none') {
+        showGameScreen();
+      }
+    }, 1000);
   });
 }
+
 window.handleCreateGame = handleCreateGame;
 window.handleJoinGame = handleJoinGame;
