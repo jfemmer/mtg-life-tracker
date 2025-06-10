@@ -66,12 +66,13 @@ socket.on('players', (data) => {
   }
 
   const commanderImgs = others.map(p => `
-  <div>
-    <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-         title="${p.name}: ${p.commanderName || 'Unknown Commander'}" />
-    <div class="life-overlay">${p.life}</div>
-  </div>
-`).join('');
+    <div style="position: relative;">
+      <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+           title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+           style="width: 100%; border-radius: 8px;" />
+      <div class="life-overlay">${p.life}</div>
+    </div>
+  `).join('');
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
 });
 
