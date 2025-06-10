@@ -125,3 +125,22 @@ button:hover {
   text-shadow: 0 0 5px black;
   pointer-events: none;
 }
+
+.commander-container.dead {
+  filter: grayscale(100%);
+  border: 3px solid red;
+  position: relative;
+}
+
+.commander-container.dead::after {
+  content: "";
+  background: url('skull.png') center center no-repeat;
+  background-size: 40px 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+}
