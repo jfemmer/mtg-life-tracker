@@ -65,7 +65,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
     }
 
     const commanderImgs = others.map(p => `
-      <div style="position: relative;">
+      <div class="commander-container">
         <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
              style="width: 100%; border-radius: 8px;" />
