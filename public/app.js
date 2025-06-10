@@ -121,10 +121,48 @@ async function handleJoinGame() {
 
   commanderImage = await fetchCommanderImage(commanderName);
 
+  // 💡 First set up socket
   socket = io('https://mtg-life-tracker-production.up.railway.app');
-  setupSocket(playerName, commanderName, commanderImage);
 
-  // 👇 Manually emit the join event
+  // 💡 Then add listeners *after* socket is initialized
+  socket.on('joined', (data) => {
+    myId = data.playerId;
+    gameCode = data.gameCode;
+
+    const me = data.player;
+    if (me) {
+      document.getElementById('yourCommanderSpotlight').innerHTML = `
+        <h3>${me.name} (${me.commanderName})</h3>
+        <img src="${me.commanderImage}" alt="${me.commanderName}" />
+      `;
+    }
+
+    showGameScreen();
+  });
+
+  socket.on('players', (data) => {
+    const others = data.players.filter(p => p.id !== myId);
+    const me = data.players.find(p => p.id === myId);
+
+    if (me) {
+      myLife = me.life;
+      document.getElementById('yourCommanderSpotlight').innerHTML = `
+        <h3>${me.name} (${me.commanderName})</h3>
+        <img src="${me.commanderImage}" alt="${me.commanderName}" />
+      `;
+    }
+
+    const commanderImgs = others.map(p => `
+      <div>
+        <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+             title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+             style="width: 100%; border-radius: 8px;" />
+      </div>
+    `).join('');
+    document.getElementById('otherCommanders').innerHTML = commanderImgs;
+  });
+
+  // ✅ Finally emit the join event
   socket.emit('join', {
     gameCode,
     name: playerName,
