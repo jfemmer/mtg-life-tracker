@@ -42,19 +42,29 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('players', (data) => {
-    const playersDiv = document.getElementById('players');
-    playersDiv.innerHTML = data.players.map(p => `
-      <div style="margin-bottom: 10px;">
-        <p><strong>${p.name}</strong>: ${p.life} ${p.id === myId ? "(You)" : ""}</p>
-        ${p.commanderImage ? `<img src="${p.commanderImage}" alt="${p.commanderName}" width="100" style="border-radius: 8px;" />` : ""}
-      </div>
-    `).join('');
+  const others = data.players.filter(p => p.id !== myId);
+  const me = data.players.find(p => p.id === myId);
 
-    const me = data.players.find(p => p.id === myId);
-    if (me) {
-      myLife = me.life;
-    }
-  });
+  // Update your commander spotlight
+  if (me) {
+    myLife = me.life;
+    document.getElementById('yourCommanderSpotlight').innerHTML = `
+      <h3>${me.name} (${me.commanderName})</h3>
+      <img src="${me.commanderImage}" alt="${me.commanderName}" />
+    `;
+  }
+
+  // Render other players
+  const commanderImgs = others.map(p => `
+    <div>
+      <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+           title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+           style="width: 100%; border-radius: 8px;" />
+    </div>
+  `).join('');
+  document.getElementById('otherCommanders').innerHTML = commanderImgs;
+});
+
 }
 
 
