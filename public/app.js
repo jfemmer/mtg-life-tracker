@@ -41,7 +41,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     const me = data.player;
     if (me) {
-      document.getElementById('yourCommanderSpotlight').innerHTML = `
+      document.getElementById('yourCommander').innerHTML = `
   <div class="commander-spotlight">
     <h3>${me.name} (${me.commanderName})</h3>
     <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
@@ -61,7 +61,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     if (me) {
   myLife = me.life;
-  document.getElementById('yourCommanderSpotlight').innerHTML = `
+  document.getElementById('yourCommander').innerHTML = `
     <div class="commander-spotlight">
       <h3>${me.name} (${me.commanderName})</h3>
       <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
