@@ -37,24 +37,25 @@ h2, h3 {
 
 /* Commander area (shrunken and offset for safe area) */
 #yourCommander {
-  flex: 0 0 auto;
-  width: 60%; /* 60% of screen width on mobile for balance */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   max-width: 300px;
-  margin-top: calc(env(safe-area-inset-top, 0px) + 10px);
-  padding: 10px;
-  background: linear-gradient(to bottom right, #292929, #1b1b1b);
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-  box-sizing: border-box;
+  margin: 20px auto;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 #yourCommander img {
-  width: 100%; /* fills the container */
+  width: 100%;
   max-height: 18vh;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
-  transition: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .other-commander-grid {
