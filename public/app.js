@@ -64,14 +64,17 @@ function setupSocket(playerName, commanderName, commanderImage) {
       `;
     }
 
-    const commanderImgs = others.map(p => `
-      <div class="commander-container">
-        <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-             title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-             style="width: 100%; border-radius: 8px;" />
-        <div class="life-overlay">${p.life}</div>
-      </div>
-    `).join('');
+    const commanderImgs = others.map(p => {
+      const isDead = p.life <= 0;
+      return `
+        <div class="commander-container${isDead ? ' dead' : ''}">
+          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+              class="commander-img" />
+          <div class="life-overlay">${p.life}</div>
+        </div>
+      `;
+    }).join('');
     document.getElementById('otherCommanders').innerHTML = commanderImgs;
   });
 }
