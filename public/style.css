@@ -123,7 +123,7 @@ h2, h3 {
 .commander-container.dead {
   filter: grayscale(100%);
   border: 3px solid red !important;
-  background: linear-gradient(to bottom right, #440000, #220000); /* dark red tint */
+  background: linear-gradient(to bottom right, #440000, #220000); /* red background */
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); /* red glow */
   position: relative;
 }
@@ -140,8 +140,8 @@ h2, h3 {
   height: 32px;
   z-index: 5;
 
-  /* red glow behind skull */
-  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.5);
+  /* red glow highlight under the skull */
+  box-shadow: 0 0 14px 6px rgba(255, 0, 0, 0.6);
   border-radius: 50%;
 }
 
