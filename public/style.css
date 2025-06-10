@@ -53,15 +53,14 @@ h2, h3 {
   transition: none;
 }
 
-/* Other players (takes ~28vh) */
 .other-commander-grid {
-  flex: 0 0 28vh;
+  flex: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .other-commander-grid .commander-container {
@@ -95,6 +94,7 @@ h2, h3 {
 
 #minus, #plus {
   font-size: 16px;
+  padding: 14px 20px;
   width: 40%;
   max-width: 140px;
   touch-action: manipulation;
