@@ -35,7 +35,7 @@ h2, h3 {
 
 /* Commander area (shrunken) */
 #yourCommander {
-  flex: 0 0 28vh;
+  flex: 0 0 24vh;
   width: 100%;
   padding: 8px;
   background: linear-gradient(to bottom right, #292929, #1b1b1b);
@@ -46,7 +46,7 @@ h2, h3 {
 
 #yourCommander img {
   width: 100%;
-  max-height: 22vh;
+  max-height: 18vh;
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
