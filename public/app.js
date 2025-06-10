@@ -56,7 +56,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
     }
   });
 }
-}
+
 
 function changeLife(amount) {
   myLife += amount;
