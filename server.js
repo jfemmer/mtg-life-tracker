@@ -40,7 +40,17 @@ io.on('connection', (socket) => {
   games[gameCode].players.push(player);
 
   socket.join(gameCode);
-  socket.emit('joined', { playerId, gameCode });
+ socket.emit('joined', {
+  playerId,
+  gameCode,
+  player: {
+    id: playerId,
+    name,
+    life: 40,
+    commanderName,
+    commanderImage
+  }
+});
   io.to(gameCode).emit('players', { players: games[gameCode].players });
 });
 
