@@ -51,25 +51,25 @@ function setupSocket(playerName, commanderName, commanderImage) {
   showGameScreen();
 });
 
-  socket.on('players', (data) => {
+socket.on('players', (data) => {
   const others = data.players.filter(p => p.id !== myId);
   const me = data.players.find(p => p.id === myId);
 
-  // Update your commander spotlight
   if (me) {
     myLife = me.life;
     document.getElementById('yourCommanderSpotlight').innerHTML = `
       <h3>${me.name} (${me.commanderName})</h3>
       <img src="${me.commanderImage}" alt="${me.commanderName}" />
+      <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
     `;
   }
 
-  // Render other players
   const commanderImgs = others.map(p => `
     <div>
       <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
            title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
            style="width: 100%; border-radius: 8px;" />
+      <p style="margin-top: 8px; font-size: 0.9rem;">${p.name}: ${p.life} life</p>
     </div>
   `).join('');
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
