@@ -45,6 +45,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
     document.getElementById('yourCommanderSpotlight').innerHTML = `
       <h3>${me.name} (${me.commanderName})</h3>
       <img src="${me.commanderImage}" alt="${me.commanderName}" />
+      <p style="margin-top: 10px; font-size: 1.1rem;">Life: ${me.life}</p>
     `;
   }
 
@@ -65,13 +66,13 @@ socket.on('players', (data) => {
   }
 
   const commanderImgs = others.map(p => `
-    <div>
-      <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-           title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-           style="width: 100%; border-radius: 8px;" />
-      <p style="margin-top: 8px; font-size: 0.9rem;">${p.name}: ${p.life} life</p>
-    </div>
-  `).join('');
+  <div>
+    <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+         title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+         style="width: 100%; border-radius: 8px;" />
+    <p style="margin-top: 8px; font-size: 0.9rem;">${p.name}: ${p.life} life</p>
+  </div>
+`).join('');
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
 });
 
