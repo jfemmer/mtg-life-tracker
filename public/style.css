@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #1e1e1e, #121212);
@@ -22,15 +22,18 @@ h2, h3 {
   font-size: 1.3rem;
 }
 
-/* Main containers */
 #setup, #game {
+  flex: 1;
   height: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 1rem;
+  overflow: hidden;
+}
+
+#game > .other-commander-grid {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Spotlight Commander Section */
