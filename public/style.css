@@ -52,11 +52,13 @@ h2, h3 {
 
 .other-commander-grid div {
   background: #1c1c1c;
-  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
   width: 120px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0; /* Remove padding so the image fills the container */
 }
 
 .other-commander-grid img {
@@ -84,4 +86,16 @@ button {
 
 button:hover {
   background: #388e3c;
+}
+
+.life-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 5px black;
+  pointer-events: none;
 }
