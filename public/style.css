@@ -79,7 +79,7 @@ h2, h3 {
 }
 
 .commander-img {
-  width: 100%;
+  width: 40%;
   border-radius: 8px;
   object-fit: contain;
   transition: none;
