@@ -49,6 +49,8 @@ h2, h3 {
 
 #yourCommander img {
   width: 100%;
+  max-height: 35vh; /* shrink for mobile */
+  object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 255, 150, 0.25);
   transition: transform 0.3s ease;
@@ -182,4 +184,14 @@ button:hover {
   width: 45%;
   max-width: 200px;
   margin: 10px;
+}
+
+@media (max-width: 480px) {
+  #yourCommander img {
+    max-height: 28vh;
+  }
+
+  h2, h3 {
+    font-size: 1.1rem;
+  }
 }
