@@ -1,13 +1,16 @@
-body {
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #1e1e1e, #121212);
   color: #f5f5f5;
-  margin: 0;
-  padding: 0;
   text-align: center;
   font-size: 1rem;
 }
 
+/* Headings */
 h1 {
   color: #90ee90;
   margin: 5vw 0 4vw;
@@ -19,10 +22,18 @@ h2, h3 {
   font-size: 1.3rem;
 }
 
-#game {
-  padding: 5vw 4vw;
+/* Main containers */
+#setup, #game {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
+/* Spotlight Commander Section */
 #yourCommander {
   margin: 5vw auto;
   padding: 4vw;
@@ -44,6 +55,7 @@ h2, h3 {
   transform: scale(1.05);
 }
 
+/* Other Players Grid */
 .other-commander-grid {
   display: flex;
   flex-wrap: wrap;
@@ -51,6 +63,8 @@ h2, h3 {
   gap: 16px;
   margin-top: 6vw;
   padding: 2vw;
+  overflow-y: auto;
+  max-height: 30vh;
 }
 
 .other-commander-grid .commander-container {
@@ -63,6 +77,7 @@ h2, h3 {
   padding: 0;
 }
 
+/* Commander Image */
 .commander-img {
   width: 100%;
   border-radius: 8px;
@@ -74,6 +89,7 @@ h2, h3 {
   transform: scale(1.08);
 }
 
+/* Input Fields */
 input[type="text"] {
   width: 90%;
   max-width: 400px;
@@ -100,6 +116,7 @@ input[type="text"]::placeholder {
   font-style: italic;
 }
 
+/* Buttons */
 button {
   background: linear-gradient(to right, #2ecc71, #27ae60);
   color: white;
@@ -122,6 +139,7 @@ button:hover {
   transform: scale(1.04);
 }
 
+/* Life Overlay */
 .life-overlay {
   position: absolute;
   top: 50%;
@@ -134,6 +152,7 @@ button:hover {
   pointer-events: none;
 }
 
+/* Dead Player Styling */
 .commander-container.dead {
   filter: grayscale(100%);
   border: 3px solid red;
@@ -153,6 +172,7 @@ button:hover {
   z-index: 5;
 }
 
+/* Life Buttons */
 #minus, #plus {
   font-size: 2rem;
   padding: 18px 30px;
