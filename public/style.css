@@ -10,36 +10,32 @@ html, body {
   font-size: 1rem;
 }
 
+/* Headings */
 h1 {
   color: #90ee90;
-  margin: 0.5vh 0 0.3vh;
-  font-size: 1.3rem;
+  margin: 0.5vh 0;
+  font-size: 1.4rem;
 }
 
 h2, h3 {
-  margin: 0.3vh 0;
+  margin: 0.5vh 0;
   font-size: 1.1rem;
 }
 
+/* Game container fills screen with no scroll */
 #game {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
   padding: 0.5vh 3vw;
   box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
 }
 
-#gameCodeDisplay {
-  font-weight: bold;
-  color: #fffa8b;
-  margin: 0.3vh 0;
-}
-
-/* Commander Image Section */
+/* Commander area (shrunken) */
 #yourCommander {
-  flex: 0 0 26vh;
+  flex: 0 0 28vh;
   width: 100%;
   padding: 8px;
   background: linear-gradient(to bottom right, #292929, #1b1b1b);
@@ -57,18 +53,18 @@ h2, h3 {
   transition: none;
 }
 
-/* Other Players */
+/* Other players (takes ~28vh) */
 .other-commander-grid {
-  flex: 0 0 24vh;
+  flex: 0 0 28vh;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   overflow: hidden;
 }
 
-.commander-container {
+.other-commander-grid .commander-container {
   position: relative;
   overflow: hidden;
   background: linear-gradient(to bottom right, #333, #111);
@@ -76,7 +72,7 @@ h2, h3 {
   border: 3px solid gold;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   padding: 4px;
-  width: 42vw;
+  width: 40vw;
   max-width: 120px;
 }
 
@@ -87,9 +83,9 @@ h2, h3 {
   transition: none;
 }
 
-/* Life Buttons */
+/* Life buttons (bottom 15vh) */
 .life-controls {
-  flex: 0 0 13vh;
+  flex: 0 0 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,21 +94,26 @@ h2, h3 {
 }
 
 #minus, #plus {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   padding: 12px 16px;
   width: 40%;
   max-width: 140px;
 }
 
-/* Game Code at top */
-#gameCodeWrapper {
-  flex: 0 0 auto;
-  margin-top: 0.5vh;
-  font-size: 1.1rem;
-  color: gold;
+/* Life Overlay */
+.life-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 5px black;
+  pointer-events: none;
 }
 
-/* Dead players */
+/* Dead Player Styling */
 .commander-container.dead {
   filter: grayscale(100%);
   border: 3px solid red !important;
@@ -132,7 +133,17 @@ h2, h3 {
   z-index: 5;
 }
 
-/* Input fields (setup only) */
+/* Setup screen */
+#setup {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Inputs */
 input[type="text"] {
   width: 90%;
   max-width: 400px;
@@ -145,6 +156,7 @@ input[type="text"] {
   color: #f5f5f5;
   box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
   display: block;
+  touch-action: manipulation;
 }
 
 input[type="text"]:focus {
@@ -172,18 +184,9 @@ button {
   box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
   cursor: pointer;
   transition: background 0.3s ease;
+  touch-action: manipulation;
 }
 
 button:hover {
   background: linear-gradient(to right, #45d98a, #2ecc71);
-}
-
-/* Setup screen */
-#setup {
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
