@@ -43,7 +43,6 @@ function setupSocket(playerName, commanderName, commanderImage) {
     if (me) {
       document.getElementById('yourCommander').innerHTML = `
   <div class="commander-spotlight">
-    <h3>${me.name} (${me.commanderName})</h3>
     <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
       <div class="life-overlay">${me.life}</div>
