@@ -51,13 +51,11 @@ h2, h3 {
 }
 
 .other-commander-grid div {
-  background: transparent; /* ✅ REMOVE the black background */
-  border-radius: 10px;
-  box-shadow: none; /* (optional) remove glow if undesired */
-  width: 120px;
-  text-align: center;
-  position: relative;
+  position: relative; /* REQUIRED for overlay positioning */
   overflow: hidden;
+  background: transparent;
+  border-radius: 10px;
+  width: 120px;
   padding: 0;
 }
 
