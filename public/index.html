@@ -2,42 +2,44 @@
 <html>
 <head>
   <title>MTG Life Tracker</title>
-<link rel="stylesheet" href="style.css" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <body>
 
   <div id="setup">
-  <input type="text" id="playerName" placeholder="Your Name" />
-  <div style="position: relative; width: 90%; max-width: 400px; margin: 0 auto;">
-    <input type="text" id="commanderName" placeholder="Commander Name" autocomplete="off" />
-    <div id="commanderDropdown" class="dropdown-list"></div>
+    <input type="text" id="playerName" placeholder="Your Name" />
+    <div style="position: relative; width: 90%; max-width: 400px; margin: 0 auto;">
+      <input type="text" id="commanderName" placeholder="Commander Name" autocomplete="off" />
+      <div id="commanderDropdown" class="dropdown-list"></div>
+    </div>
+    <br>
+    <button onclick="handleCreateGame()">Create Game</button>
+    <br><br>
+    <input type="text" id="joinCode" placeholder="Game Code to Join" />
+    <button onclick="handleJoinGame()">Join Game</button>
   </div>
-  <br>
-  <button onclick="handleCreateGame()">Create Game</button>
-  <br><br>
-  <input type="text" id="joinCode" placeholder="Game Code to Join" />
-  <button onclick="handleJoinGame()">Join Game</button>
-</div>
 
   <div id="game" style="display: none;">
-  <h2>Game Code: <span id="gameCodeDisplay"></span></h2>
+    <h2>Game Code: <span id="gameCodeDisplay"></span></h2>
 
-  <!-- Spotlighted user's commander -->
-  <div id="yourCommander" class="spotlight-wrapper"></div>
+    <!-- Spotlighted user's commander -->
+    <div id="yourCommander" class="spotlight-wrapper"></div>
 
-  <div>
-    <button id="minus" disabled>-1</button>
-    <button id="plus" disabled>+1</button>
+    <div>
+      <button id="minus" disabled>-1</button>
+      <button id="plus" disabled>+1</button>
+    </div>
+
+    <!-- Separated section -->
+    <h3>Other Players</h3>
+    <div id="otherCommanders" class="other-commander-grid"></div>
   </div>
 
-  <!-- Separated section -->
-  <h3>Other Players</h3>
-  <div id="otherCommanders" class="other-commander-grid"></div>
-</div>
+  <!-- Optional: preload skull image for smoother effect -->
+  <link rel="preload" href="skull.png" as="image" />
 
-
- <script type="module" src="app.js"></script>
+  <script type="module" src="app.js"></script>
 
 </body>
 </html>
