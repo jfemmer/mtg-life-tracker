@@ -13,24 +13,48 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('plus').onclick = () => changeLife(1);
   document.getElementById('commanderName').addEventListener('input', async (e) => {
   const query = e.target.value.trim();
-  const suggestionList = document.getElementById('commanderSuggestions');
-  suggestionList.innerHTML = ''; // Clear old suggestions
+  const dropdown = document.getElementById('commanderDropdown');
+  dropdown.innerHTML = '';
+  dropdown.style.display = 'none';
 
-  if (query.length < 3) return; // wait for meaningful input
+  if (query.length < 3) return;
 
   try {
     const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander`);
     const data = await res.json();
+
     if (data.data) {
-      const names = [...new Set(data.data.map(card => card.name))]; // dedupe
-      names.slice(0, 10).forEach(name => {
-        const option = document.createElement('option');
-        option.value = name;
-        suggestionList.appendChild(option);
+      data.data.slice(0, 10).forEach(card => {
+        const name = card.name;
+        const image = card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || '';
+        if (!image) return;
+
+        const option = document.createElement('div');
+        option.style.display = 'flex';
+        option.style.alignItems = 'center';
+        option.style.padding = '6px';
+        option.style.cursor = 'pointer';
+        option.style.borderBottom = '1px solid #333';
+
+        option.innerHTML = `
+          <img src="${image}" alt="${name}" style="width: 40px; height: auto; margin-right: 10px; border-radius: 4px;" />
+          <span style="color: #fff;">${name}</span>
+        `;
+
+        option.addEventListener('click', () => {
+          document.getElementById('commanderName').value = name;
+          dropdown.style.display = 'none';
+        });
+
+        dropdown.appendChild(option);
       });
+
+      if (dropdown.children.length > 0) {
+        dropdown.style.display = 'block';
+      }
     }
   } catch (err) {
-    console.error("❌ Scryfall commander search failed", err);
+    console.error("❌ Scryfall fetch failed", err);
   }
 });
 
