@@ -296,14 +296,3 @@ textarea {
   -webkit-user-select: none;
   user-select: none;
 }
-
-@media (max-width: 480px) {
-  .life-overlay {
-    font-size: 2.4rem;
-    top: 25%; /* <- Adjust this value to move it higher on mobile */
-  }
-
-  #yourCommander img {
-    max-height: 30vh;
-  }
-}
