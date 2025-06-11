@@ -176,7 +176,18 @@ function showGameScreen() {
   document.getElementById('gameCodeDisplay').textContent = gameCode;
   document.getElementById('minus').disabled = false;
   document.getElementById('plus').disabled = false;
-}
+  let commanderTax = 0;
+  const taxBtn = document.getElementById('commanderTaxBtn');
+  const taxDisplay = document.getElementById('commanderTaxDisplay');
+  
+  if (taxBtn && taxDisplay) {
+    taxBtn.onclick = () => {
+      commanderTax += 2;
+      taxDisplay.textContent = `Tax: $${commanderTax}`;
+    };
+  }
+    
+  }
 
 async function handleCreateGame() {
   playerName = document.getElementById('playerName').value.trim();
