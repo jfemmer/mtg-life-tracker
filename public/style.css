@@ -190,11 +190,11 @@ h1, h2, h3 {
   background: url('skull.png') center center no-repeat;
   background-size: 38px 38px; /* slightly larger */
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
+  width: 60px;
+  height: 60px;
   z-index: 6;
   border-radius: 50%;
   box-shadow:
