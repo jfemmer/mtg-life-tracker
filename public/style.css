@@ -1,41 +1,36 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100dvh; /* fixes Chrome viewport issue */
+  height: 100dvh;
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom, #1e1e1e, #121212);
-  color: #f5f5f5;
+  background: linear-gradient(to bottom, #0a0a0a, #000);
+  color: #f0f0f0;
   text-align: center;
   font-size: 1rem;
   box-sizing: border-box;
-  padding-top: 4vh; /* offsets browser bar overlap */
+  padding-top: 4vh;
 }
 
 /* Headings */
-h1 {
-  color: #90ee90;
+h1, h2, h3 {
+  color: #ffffff;
   margin: 0.5vh 0;
-  font-size: 1.4rem;
+  text-shadow: 0 0 6px rebeccapurple;
 }
 
-h2, h3 {
-  margin: 0.5vh 0;
-  font-size: 1.1rem;
-}
-
+/* Game container */
 #game {
-  height: calc(100dvh - 4vh); /* subtract space for browser bar */
+  height: calc(100dvh - 4vh);
   padding-top: 0.5vh;
   padding-bottom: 0.5vh;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Commander area (shrunken and offset for safe area) */
+/* Commander area */
 #yourCommander {
   display: flex;
   justify-content: center;
@@ -43,21 +38,15 @@ h2, h3 {
   width: 100%;
   max-width: 500px;
   margin: 20px auto;
-  padding: 0;
-  background: none;
-  border: none;
-  box-shadow: none;
-  border-radius: 0;
 }
 
 #yourCommander img {
   width: 100%;
-  max-height: 35vh; 
+  max-height: 35vh;
   object-fit: contain;
-  border-radius: 0;
-  box-shadow: none;
 }
 
+/* Other players */
 .other-commander-grid {
   flex: 1;
   display: flex;
@@ -70,11 +59,10 @@ h2, h3 {
 
 .other-commander-grid .commander-container {
   position: relative;
-  overflow: hidden;
-  background: linear-gradient(to bottom right, #333, #111);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  padding: 4px;
+  background: linear-gradient(to bottom right, #1a1a1a, #000);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(102, 51, 153, 0.5);
+  padding: 6px;
   width: 40vw;
   max-width: 120px;
 }
@@ -83,10 +71,14 @@ h2, h3 {
   width: 60%;
   border-radius: 8px;
   object-fit: contain;
-  transition: none;
+  transition: transform 0.2s ease;
 }
 
-/* Life buttons (bottom 15vh) */
+.commander-img:hover {
+  transform: scale(1.05);
+}
+
+/* Life buttons */
 .life-controls {
   flex: 0 0 15vh;
   display: flex;
@@ -101,13 +93,20 @@ h2, h3 {
   padding: 14px 20px;
   width: 40%;
   max-width: 140px;
-  touch-action: manipulation;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  user-select: none;
+  background: rebeccapurple;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rebeccapurple;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-/* Life Overlay */
+#minus:hover, #plus:hover {
+  background: #8254c1;
+}
+
+/* Life overlay */
 .life-overlay {
   position: absolute;
   top: 50%;
@@ -120,12 +119,12 @@ h2, h3 {
   pointer-events: none;
 }
 
+/* Dead commander */
 .commander-container.dead {
   filter: grayscale(100%);
-  border: 3px solid red !important;
-  background: linear-gradient(to bottom right, #440000, #220000); /* red background */
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); /* red glow */
-  position: relative;
+  border: 2px solid #ff0044;
+  background: linear-gradient(to bottom right, #330000, #110000);
+  box-shadow: 0 0 16px rgba(255, 0, 80, 0.6);
 }
 
 .commander-container.dead::after {
@@ -139,8 +138,6 @@ h2, h3 {
   width: 32px;
   height: 32px;
   z-index: 5;
-
-  /* red glow highlight under the skull */
   box-shadow: 0 0 14px 6px rgba(255, 0, 0, 0.6);
   border-radius: 50%;
 }
@@ -148,61 +145,58 @@ h2, h3 {
 /* Setup screen */
 #setup {
   height: 100vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-/* Inputs */
+/* Input styling */
 input[type="text"] {
   width: 90%;
   max-width: 400px;
   padding: 14px 18px;
   margin: 10px auto;
   font-size: 1.1rem;
-  border-radius: 10px;
-  border: 2px solid #4caf50;
-  background: #1c1c1c;
-  color: #f5f5f5;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
-  display: block;
-  touch-action: manipulation;
+  border-radius: 12px;
+  border: 2px solid rebeccapurple;
+  background: #0d0d0d;
+  color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(102, 51, 153, 0.4);
 }
 
 input[type="text"]:focus {
   outline: none;
-  border-color: #90ee90;
-  box-shadow: 0 0 14px rgba(144, 238, 144, 0.6);
+  border-color: white;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.7);
 }
 
 input[type="text"]::placeholder {
-  color: #bbb;
+  color: #aaa;
   font-style: italic;
 }
 
 /* Buttons */
 button {
-  background: linear-gradient(to right, #2ecc71, #27ae60);
+  background: linear-gradient(to right, rebeccapurple, #502a7c);
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 12px;
   padding: 14px 22px;
-  font-size: 16px !important;
+  font-size: 16px;
   width: 90%;
   max-width: 300px;
-  box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 0 14px rgba(102, 51, 153, 0.6);
   cursor: pointer;
   transition: background 0.3s ease;
-  touch-action: manipulation;
 }
 
 button:hover {
-  background: linear-gradient(to right, #45d98a, #2ecc71);
+  background: linear-gradient(to right, #8254c1, rebeccapurple);
 }
 
+/* Player label */
 .commander-wrapper {
   display: flex;
   flex-direction: column;
@@ -213,7 +207,14 @@ button:hover {
 
 .player-label {
   font-size: 0.9rem;
-  color: #ffcccc;
+  color: #e0b3ff;
   margin-bottom: 4px;
-  text-shadow: 0 0 4px #000;
+  text-shadow: 0 0 4px rebeccapurple;
+}
+
+/* Custom dropdown hover */
+#commanderDropdown div:hover {
+  background: #291d3a;
+  box-shadow: 0 0 10px rebeccapurple;
+  border-radius: 6px;
 }
