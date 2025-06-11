@@ -160,7 +160,7 @@ h1, h2, h3 {
 
 .life-overlay {
   position: absolute;
-  top: 30%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 3.5rem; /* larger size */
