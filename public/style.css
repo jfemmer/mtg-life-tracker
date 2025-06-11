@@ -137,6 +137,10 @@ h1, h2, h3 {
   box-shadow: 0 0 12px rebeccapurple;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 #minus:hover, #plus:hover {
   background: #8254c1;
