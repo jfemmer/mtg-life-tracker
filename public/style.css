@@ -408,3 +408,17 @@ textarea {
   color: #e0e0e0;
   text-shadow: 0 0 5px black;
 }
+
+.tax-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 0, 0, 0.8);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
