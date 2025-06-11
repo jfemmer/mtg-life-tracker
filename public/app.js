@@ -103,7 +103,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">Tax: $${window.commanderTax || 0}</div>
+          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
         </div>
       </div>
     `;
@@ -126,7 +126,7 @@ document.getElementById('yourCommander').innerHTML = `
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
       ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
       ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-      <div id="commanderTaxBadge" class="tax-badge">Tax: $${window.commanderTax || 0}</div>
+      <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
     </div>
   </div>
 `;
