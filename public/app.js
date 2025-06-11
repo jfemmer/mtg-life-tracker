@@ -13,6 +13,30 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('plus').onclick = () => changeLife(1);
 });
 
+document.getElementById('commanderName').addEventListener('input', async (e) => {
+  const query = e.target.value.trim();
+  const suggestionList = document.getElementById('commanderSuggestions');
+  suggestionList.innerHTML = ''; // Clear old suggestions
+
+  if (query.length < 3) return; // wait for meaningful input
+
+  try {
+    const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander`);
+    const data = await res.json();
+    if (data.data) {
+      const names = [...new Set(data.data.map(card => card.name))]; // dedupe
+      names.slice(0, 10).forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        suggestionList.appendChild(option);
+      });
+    }
+  } catch (err) {
+    console.error("❌ Scryfall commander search failed", err);
+  }
+});
+
+
 async function fetchCommanderImage(name) {
   try {
     const res = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(name)}`);
