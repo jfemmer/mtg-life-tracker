@@ -116,15 +116,30 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     if (me) {
   myLife = me.life;
-  document.getElementById('yourCommander').innerHTML = `
+  if (!window.commanderTax) window.commanderTax = 0;
+
+document.getElementById('yourCommander').innerHTML = `
   <div class="commander-spotlight">
     <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
       ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
       ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
+      <button id="commanderTaxBtn" class="commander-tax-btn">+2</button>
+      <div id="commanderTaxDisplay" class="commander-tax-display">Tax: $0</div>
     </div>
   </div>
 `;
+
+setTimeout(() => {
+  const btn = document.getElementById('commanderTaxBtn');
+  const display = document.getElementById('commanderTaxDisplay');
+  if (btn && display) {
+    btn.onclick = () => {
+      window.commanderTax += 2;
+      display.textContent = `Tax: $${window.commanderTax}`;
+    };
+  }
+}, 100); // wait for DOM render
 }
 
     const commanderImgs = others.map(p => {
