@@ -147,7 +147,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
 }
 
 function changeLife(amount) {
-  myLife += amount;
+  const newLife = myLife + amount;
+  if (newLife < 0) return;
+
+  myLife = newLife;
   console.log(`Life changed to ${myLife}`);
   socket.emit('updateLife', { life: myLife });
 }
