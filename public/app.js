@@ -99,7 +99,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
   <div class="commander-spotlight">
     <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      ${p.life > 0 ? `<div class="life-overlay">${p.life}</div>` : ''}
+      ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
     </div>
   </div>
 `;
