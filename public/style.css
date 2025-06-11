@@ -184,24 +184,31 @@ h1, h2, h3 {
   box-shadow: 0 0 10px 4px red;
   border-radius: 8px;
 }
-
 .commander-container.dead::after {
   content: "";
-  background: url('skull.png') center center no-repeat;
-  background-size: 38px 38px; /* slightly larger */
   position: absolute;
-  top: 40%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
   z-index: 6;
   border-radius: 50%;
+
+  /* Red circular underlay + skull image */
+  background:
+    radial-gradient(circle at center, rgba(255, 0, 0, 0.7) 0%, rgba(100, 0, 0, 0.5) 65%, transparent 85%),
+    url('skull.png') center center no-repeat;
+
+  background-size: 38px 38px;
+  background-blend-mode: lighten;
+
+  /* Glow & pulse */
   box-shadow:
     0 0 12px 6px rgba(255, 0, 0, 0.8),
     0 0 20px 10px rgba(255, 0, 0, 0.4),
     inset 0 0 12px rgba(255, 0, 0, 0.4);
-  background-color: rgba(255, 0, 0, 0.15); /* red glow under the skull */
+
   animation: pulseRed 1.5s infinite ease-in-out;
 }
 
