@@ -10,6 +10,14 @@ html, body {
   box-sizing: border-box;
   padding-top: 4vh;
   text-align: center;
+  -ms-touch-action: manipulation;    /* IE10+ */
+  touch-action: manipulation;        /* Chrome, Edge, Safari */
+  -webkit-user-select: none;         /* Safari */
+  -moz-user-select: none;            /* Firefox */
+  -ms-user-select: none;             /* IE10+ */
+  user-select: none;                 /* Modern browsers */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Headings */
@@ -229,6 +237,11 @@ button {
   box-shadow: 0 0 14px rgba(102, 51, 153, 0.6);
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
 button:hover {
   background: linear-gradient(to right, #8254c1, rebeccapurple);
@@ -272,10 +285,11 @@ button:hover {
 }
 
 input,
-button,
 select,
 textarea {
   font-size: 16px !important;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
