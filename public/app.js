@@ -27,31 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const seenNames = new Set();
 
   data.data.forEach(card => {
-    const name = card.name;
-    if (seenNames.has(name)) return;
-    seenNames.add(name);
-
-    const image = card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || '';
-    if (!image) return;
-
-    const option = document.createElement('div');
-    option.style.display = 'flex';
-    option.style.alignItems = 'center';
-    option.style.padding = '6px';
-    option.style.cursor = 'pointer';
-    option.style.borderBottom = '1px solid #333';
-
-    option.innerHTML = `
-      <img src="${image}" alt="${name}" style="width: 40px; height: auto; margin-right: 10px; border-radius: 4px;" />
-      <span style="color: #fff;">${name}</span>
-    `;
-
-    option.addEventListener('click', () => {
-      document.getElementById('commanderName').value = name;
-      dropdown.style.display = 'none';
-    });
-
-    dropdown.appendChild(option);
+   const name = card.name.trim().toLowerCase();
+      if (seenNames.has(name)) return;
+      seenNames.add(name);
+      
+      const displayName = card.name;
+      const image = card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || '';
+      if (!image) return;
+      
+      const option = document.createElement('div');
+      option.style.display = 'flex';
+      option.style.alignItems = 'center';
+      option.style.padding = '6px';
+      option.style.cursor = 'pointer';
+      option.style.borderBottom = '1px solid #333';
+      
+      option.innerHTML = `
+        <img src="${image}" alt="${displayName}" style="width: 40px; height: auto; margin-right: 10px; border-radius: 4px;" />
+        <span style="color: #fff;">${displayName}</span>
+      `;
+      
+      option.addEventListener('click', () => {
+        document.getElementById('commanderName').value = displayName;
+        dropdown.style.display = 'none';
+      });
+      
+      dropdown.appendChild(option);
   });
 
   if (dropdown.children.length > 0) {
