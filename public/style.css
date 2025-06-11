@@ -6,24 +6,24 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #0a0a0a, #000);
   color: #f0f0f0;
-  text-align: center;
   font-size: 1rem;
   box-sizing: border-box;
   padding-top: 4vh;
+  text-align: center;
 }
 
 /* Headings */
 h1, h2, h3 {
   color: #ffffff;
   margin: 0.5vh 0;
-  text-shadow: 0 0 6px rebeccapurple;
+  text-shadow: 0 0 10px rebeccapurple;
+  letter-spacing: 0.05em;
 }
 
 /* Game container */
 #game {
   height: calc(100dvh - 4vh);
-  padding-top: 0.5vh;
-  padding-bottom: 0.5vh;
+  padding: 1vh 2vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -36,14 +36,26 @@ h1, h2, h3 {
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 20px auto;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 20px rgba(102, 51, 153, 0.3);
 }
 
 #yourCommander img {
   width: 100%;
   max-height: 35vh;
   object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(102, 51, 153, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#yourCommander img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rebeccapurple;
 }
 
 /* Other players */
@@ -52,30 +64,55 @@ h1, h2, h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   overflow-y: auto;
+  padding-bottom: 1rem;
+  scrollbar-color: rebeccapurple #111;
+  scrollbar-width: thin;
+}
+.other-commander-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.other-commander-grid::-webkit-scrollbar-thumb {
+  background: rebeccapurple;
+  border-radius: 6px;
 }
 
+/* Commander cards */
 .other-commander-grid .commander-container {
   position: relative;
   background: linear-gradient(to bottom right, #1a1a1a, #000);
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(102, 51, 153, 0.5);
-  padding: 6px;
+  box-shadow: 0 0 12px rgba(102, 51, 153, 0.4);
+  padding: 8px;
   width: 40vw;
-  max-width: 120px;
+  max-width: 130px;
 }
 
 .commander-img {
-  width: 60%;
-  border-radius: 8px;
+  width: 100%;
+  border-radius: 10px;
   object-fit: contain;
   transition: transform 0.2s ease;
 }
-
 .commander-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
+}
+
+/* Player label */
+.commander-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40vw;
+  max-width: 130px;
+}
+.player-label {
+  font-size: 0.9rem;
+  color: #e0b3ff;
+  margin-bottom: 4px;
+  text-shadow: 0 0 4px rebeccapurple;
 }
 
 /* Life buttons */
@@ -84,12 +121,12 @@ h1, h2, h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
 }
 
 #minus, #plus {
-  font-size: 16px;
+  font-size: 1.2rem;
   padding: 14px 20px;
   width: 40%;
   max-width: 140px;
@@ -99,11 +136,11 @@ h1, h2, h3 {
   border-radius: 10px;
   box-shadow: 0 0 12px rebeccapurple;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
-
 #minus:hover, #plus:hover {
   background: #8254c1;
+  transform: scale(1.04);
 }
 
 /* Life overlay */
@@ -119,14 +156,13 @@ h1, h2, h3 {
   pointer-events: none;
 }
 
-/* Dead commander */
+/* Dead commanders */
 .commander-container.dead {
   filter: grayscale(100%);
   border: 2px solid #ff0044;
   background: linear-gradient(to bottom right, #330000, #110000);
-  box-shadow: 0 0 16px rgba(255, 0, 80, 0.6);
+  box-shadow: 0 0 20px rgba(255, 0, 80, 0.6);
 }
-
 .commander-container.dead::after {
   content: "";
   background: url('skull.png') center center no-repeat;
@@ -149,14 +185,15 @@ h1, h2, h3 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 14px;
+  padding: 20px;
 }
 
-/* Input styling */
+/* Inputs */
 input[type="text"] {
   width: 90%;
   max-width: 400px;
   padding: 14px 18px;
-  margin: 10px auto;
   font-size: 1.1rem;
   border-radius: 12px;
   border: 2px solid rebeccapurple;
@@ -164,13 +201,11 @@ input[type="text"] {
   color: #f0f0f0;
   box-shadow: 0 0 10px rgba(102, 51, 153, 0.4);
 }
-
 input[type="text"]:focus {
   outline: none;
   border-color: white;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.7);
 }
-
 input[type="text"]::placeholder {
   color: #aaa;
   font-style: italic;
@@ -189,27 +224,11 @@ button {
   max-width: 300px;
   box-shadow: 0 0 14px rgba(102, 51, 153, 0.6);
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
-
 button:hover {
   background: linear-gradient(to right, #8254c1, rebeccapurple);
-}
-
-/* Player label */
-.commander-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 40vw;
-  max-width: 120px;
-}
-
-.player-label {
-  font-size: 0.9rem;
-  color: #e0b3ff;
-  margin-bottom: 4px;
-  text-shadow: 0 0 4px rebeccapurple;
+  transform: scale(1.03);
 }
 
 /* Custom dropdown hover */
