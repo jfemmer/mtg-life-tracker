@@ -270,3 +270,12 @@ button:hover {
   box-shadow: 0 0 8px rebeccapurple;
   border-radius: 8px;
 }
+
+input,
+button,
+select,
+textarea {
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
