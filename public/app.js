@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (query.length < 3) return;
 
   try {
-    const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander`);
+    const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander+(type:legendary+type:creature+or+type:planeswalker)`);
     const data = await res.json();
 
     if (data.data) {
