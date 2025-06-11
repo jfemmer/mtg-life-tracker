@@ -49,7 +49,7 @@ h1, h2, h3 {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(6px);
   box-shadow: 0 0 20px rgba(102, 51, 153, 0.3);
-
+  position: relative;
   /* Updated for consistent centering */
   width: fit-content;
   max-width: 90vw;
@@ -158,17 +158,17 @@ h1, h2, h3 {
   transform: scale(1.04);
 }
 
-/* Life overlay */
 .life-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 3.5rem; /* larger size */
+  font-weight: 900;
   color: white;
-  text-shadow: 0 0 5px black;
+  text-shadow: 0 0 12px black, 0 0 6px rebeccapurple;
   pointer-events: none;
+  z-index: 3;
 }
 
 /* Dead commanders */
@@ -298,10 +298,8 @@ textarea {
 }
 
 @media (max-width: 480px) {
-  #yourCommander {
-    flex-direction: column;
-    padding: 8px;
-    max-width: 95vw;
+  .life-overlay {
+    font-size: 2.4rem;
   }
 
   #yourCommander img {
