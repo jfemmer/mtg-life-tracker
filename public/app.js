@@ -126,6 +126,7 @@ document.getElementById('yourCommander').innerHTML = `
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
       ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
       ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
+      <div id="commanderTaxBadge" class="tax-badge">Tax: $${window.commanderTax || 0}</div>
     </div>
   </div>
 `;
@@ -177,8 +178,6 @@ function showGameScreen() {
   document.getElementById('minus').disabled = false;
   document.getElementById('plus').disabled = false;
   window.commanderTax = 0;
-  const taxBtn = document.getElementById('commanderTaxBtn');
-  const taxDisplay = document.getElementById('commanderTaxDisplay');
   
   if (taxBtn && taxDisplay) {
     taxBtn.onclick = () => {
