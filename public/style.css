@@ -43,14 +43,17 @@ h1, h2, h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 600px;
   margin: 20px auto;
   padding: 10px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(6px);
   box-shadow: 0 0 20px rgba(102, 51, 153, 0.3);
+
+  /* Updated for consistent centering */
+  width: fit-content;
+  max-width: 90vw;
+  box-sizing: border-box;
 }
 
 #yourCommander img {
@@ -292,4 +295,16 @@ textarea {
   text-size-adjust: 100%;
   -webkit-user-select: none;
   user-select: none;
+}
+
+@media (max-width: 480px) {
+  #yourCommander {
+    flex-direction: column;
+    padding: 8px;
+    max-width: 95vw;
+  }
+
+  #yourCommander img {
+    max-height: 30vh;
+  }
 }
