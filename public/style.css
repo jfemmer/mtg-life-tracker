@@ -172,46 +172,51 @@ h1, h2, h3 {
 }
 
 .commander-container.dead {
-  background-color: rgba(255, 0, 0, 0.2); /* semi-transparent red */
+  background-color: #8b0000 !important; /* deep red */
   border: 2px solid red;
-  border-radius: 10px;
-  padding: 4px;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.6);
+  opacity: 0.95;
+  position: relative;
+  animation: pulseRedGlow 1.6s infinite ease-in-out;
 }
 
 /* Red glow underlay for the skull */
 .commander-container.dead .commander-img {
   position: relative;
-  box-shadow: 0 0 10px 4px red;
-  border-radius: 8px;
+  filter: grayscale(100%) brightness(0.6);
+  opacity: 0.6;
+  border-radius: 10px;
+  box-shadow: 0 0 14px 6px red;
+  transition: filter 0.3s ease;
 }
+
 .commander-container.dead::after {
   content: "";
   position: absolute;
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 72px;
   z-index: 6;
   border-radius: 50%;
 
-  /* Red circular underlay + skull image */
   background:
-    radial-gradient(circle at center, rgba(255, 0, 0, 0.7) 0%, rgba(100, 0, 0, 0.5) 65%, transparent 85%),
+    radial-gradient(circle at center, rgba(255, 0, 0, 0.75) 0%, rgba(120, 0, 0, 0.5) 65%, transparent 85%),
     url('skull.png') center center no-repeat;
 
-  background-size: 38px 38px;
+  background-size: 40px 40px;
   background-blend-mode: lighten;
 
-  /* Glow & pulse */
   box-shadow:
-    0 0 12px 6px rgba(255, 0, 0, 0.8),
-    0 0 20px 10px rgba(255, 0, 0, 0.4),
-    inset 0 0 12px rgba(255, 0, 0, 0.4);
+    0 0 16px 8px rgba(255, 0, 0, 0.9),
+    0 0 28px 14px rgba(255, 0, 0, 0.5),
+    inset 0 0 16px rgba(255, 0, 0, 0.5);
 
   animation: pulseRed 1.5s infinite ease-in-out;
 }
-
 /* Setup screen */
 #setup {
   height: 100vh;
@@ -323,18 +328,33 @@ textarea {
 
 @keyframes pulseRed {
   0% {
-    box-shadow: 0 0 10px 4px rgba(255, 0, 0, 0.6),
-                0 0 20px 10px rgba(255, 0, 0, 0.3),
-                inset 0 0 10px rgba(255, 0, 0, 0.2);
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      0 0 16px 8px rgba(255, 0, 0, 0.8),
+      0 0 28px 14px rgba(255, 0, 0, 0.4),
+      inset 0 0 14px rgba(255, 0, 0, 0.4);
   }
   50% {
-    box-shadow: 0 0 18px 8px rgba(255, 0, 0, 0.8),
-                0 0 32px 14px rgba(255, 0, 0, 0.5),
-                inset 0 0 16px rgba(255, 0, 0, 0.4);
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow:
+      0 0 28px 14px rgba(255, 0, 0, 1),
+      0 0 40px 20px rgba(255, 0, 0, 0.6),
+      inset 0 0 20px rgba(255, 0, 0, 0.6);
   }
   100% {
-    box-shadow: 0 0 10px 4px rgba(255, 0, 0, 0.6),
-                0 0 20px 10px rgba(255, 0, 0, 0.3),
-                inset 0 0 10px rgba(255, 0, 0, 0.2);
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      0 0 16px 8px rgba(255, 0, 0, 0.8),
+      0 0 28px 14px rgba(255, 0, 0, 0.4),
+      inset 0 0 14px rgba(255, 0, 0, 0.4);
+  }
+}
+
+@keyframes pulseRedGlow {
+  0%, 100% {
+    box-shadow: 0 0 24px 6px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 36px 12px rgba(255, 0, 0, 0.9);
   }
 }
