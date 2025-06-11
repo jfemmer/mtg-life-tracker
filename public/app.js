@@ -100,6 +100,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
     <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
       <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
       ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+      ${me.life <= 0 ? `<div class="skull-overlay"></div>` : ''}
     </div>
   </div>
 `;
@@ -115,13 +116,14 @@ function setupSocket(playerName, commanderName, commanderImage) {
     if (me) {
   myLife = me.life;
   document.getElementById('yourCommander').innerHTML = `
-    <div class="commander-spotlight">
-      <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-        <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-        ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
-      </div>
+  <div class="commander-spotlight">
+    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
+      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+      ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+      ${me.life <= 0 ? `<div class="skull-overlay"></div>` : ''}
     </div>
-  `;
+  </div>
+`;
 }
 
     const commanderImgs = others.map(p => {
