@@ -20,39 +20,44 @@ document.addEventListener('DOMContentLoaded', () => {
   if (query.length < 3) return;
 
   try {
-    const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander+(type:legendary+type:creature+or+type:planeswalker)`);
+    const res = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}+is:commander+(type:legendary+type:creature+or+type:planeswalker)&order=released&unique=prints`);
     const data = await res.json();
 
-    if (data.data) {
-      data.data.slice(0, 10).forEach(card => {
-        const name = card.name;
-        const image = card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || '';
-        if (!image) return;
+   if (data.data) {
+  const seenNames = new Set();
 
-        const option = document.createElement('div');
-        option.style.display = 'flex';
-        option.style.alignItems = 'center';
-        option.style.padding = '6px';
-        option.style.cursor = 'pointer';
-        option.style.borderBottom = '1px solid #333';
+  data.data.forEach(card => {
+    const name = card.name;
+    if (seenNames.has(name)) return;
+    seenNames.add(name);
 
-        option.innerHTML = `
-          <img src="${image}" alt="${name}" style="width: 40px; height: auto; margin-right: 10px; border-radius: 4px;" />
-          <span style="color: #fff;">${name}</span>
-        `;
+    const image = card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || '';
+    if (!image) return;
 
-        option.addEventListener('click', () => {
-          document.getElementById('commanderName').value = name;
-          dropdown.style.display = 'none';
-        });
+    const option = document.createElement('div');
+    option.style.display = 'flex';
+    option.style.alignItems = 'center';
+    option.style.padding = '6px';
+    option.style.cursor = 'pointer';
+    option.style.borderBottom = '1px solid #333';
 
-        dropdown.appendChild(option);
-      });
+    option.innerHTML = `
+      <img src="${image}" alt="${name}" style="width: 40px; height: auto; margin-right: 10px; border-radius: 4px;" />
+      <span style="color: #fff;">${name}</span>
+    `;
 
-      if (dropdown.children.length > 0) {
-        dropdown.style.display = 'block';
-      }
-    }
+    option.addEventListener('click', () => {
+      document.getElementById('commanderName').value = name;
+      dropdown.style.display = 'none';
+    });
+
+    dropdown.appendChild(option);
+  });
+
+  if (dropdown.children.length > 0) {
+    dropdown.style.display = 'block';
+  }
+}
   } catch (err) {
     console.error("❌ Scryfall fetch failed", err);
   }
