@@ -126,7 +126,7 @@ h1, h2, h3 {
 }
 
 #minus, #plus {
-  font-size: 1.2rem;
+  font-size: 16px;
   padding: 14px 20px;
   width: 40%;
   max-width: 140px;
@@ -236,4 +236,20 @@ button:hover {
   background: #291d3a;
   box-shadow: 0 0 10px rebeccapurple;
   border-radius: 6px;
+}
+
+#commanderDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #111;
+  border: 2px solid rebeccapurple;
+  border-radius: 10px;
+  box-shadow: 0 0 14px rgba(102, 51, 153, 0.5);
+  z-index: 1000;
+  display: none;
+  max-height: 300px;
+  overflow-y: auto;
+  backdrop-filter: blur(8px);
 }
