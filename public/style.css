@@ -373,3 +373,8 @@ textarea {
   z-index: 6; /* above the red glow */
   opacity: 1;
 }
+
+.your-skull {
+  width: 72px;
+  height: 72px;
+}
