@@ -47,9 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <span style="color: #fff;">${displayName}</span>
       `;
       
-      option.addEventListener('click', () => {
+      option.addEventListener('click', async () => {
         document.getElementById('commanderName').value = displayName;
         dropdown.style.display = 'none';
+        commanderImage = await fetchCommanderImage(displayName);
       });
       
       dropdown.appendChild(option);
@@ -97,16 +98,15 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const me = data.player;
     if (me) {
       document.getElementById('yourCommander').innerHTML = `
- document.getElementById('yourCommander').innerHTML = `
-  <div class="commander-spotlight">
-    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
-      ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-      <div id="commanderTaxBadge" class="tax-badge">Tax: $${window.commanderTax || 0}</div>
-    </div>
-  </div>
-`;
+      <div class="commander-spotlight">
+        <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
+          <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+          ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
+          <div id="commanderTaxBadge" class="tax-badge">Tax: $${window.commanderTax || 0}</div>
+        </div>
+      </div>
+    `;
     }
 
     showGameScreen();
@@ -176,7 +176,7 @@ function showGameScreen() {
   document.getElementById('gameCodeDisplay').textContent = gameCode;
   document.getElementById('minus').disabled = false;
   document.getElementById('plus').disabled = false;
-  let commanderTax = 0;
+  window.commanderTax = 0;
   const taxBtn = document.getElementById('commanderTaxBtn');
   const taxDisplay = document.getElementById('commanderTaxDisplay');
   
