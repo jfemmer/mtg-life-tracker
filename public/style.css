@@ -296,3 +296,8 @@ textarea {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.dead .commander-img {
+  filter: grayscale(100%) brightness(0.4);
+  opacity: 0.6;
+}
