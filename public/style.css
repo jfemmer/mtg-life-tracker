@@ -188,16 +188,21 @@ h1, h2, h3 {
 .commander-container.dead::after {
   content: "";
   background: url('skull.png') center center no-repeat;
-  background-size: 32px 32px;
+  background-size: 38px 38px; /* slightly larger */
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 32px;
-  height: 32px;
-  z-index: 5;
-  box-shadow: 0 0 14px 6px rgba(255, 0, 0, 0.6);
+  width: 44px;
+  height: 44px;
+  z-index: 6;
   border-radius: 50%;
+  box-shadow:
+    0 0 12px 6px rgba(255, 0, 0, 0.8),
+    0 0 20px 10px rgba(255, 0, 0, 0.4),
+    inset 0 0 12px rgba(255, 0, 0, 0.4);
+  background-color: rgba(255, 0, 0, 0.15); /* red glow under the skull */
+  animation: pulseRed 1.5s infinite ease-in-out;
 }
 
 /* Setup screen */
@@ -307,4 +312,22 @@ textarea {
 .dead .commander-img {
   filter: grayscale(100%) brightness(0.4);
   opacity: 0.6;
+}
+
+@keyframes pulseRed {
+  0% {
+    box-shadow: 0 0 10px 4px rgba(255, 0, 0, 0.6),
+                0 0 20px 10px rgba(255, 0, 0, 0.3),
+                inset 0 0 10px rgba(255, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px 8px rgba(255, 0, 0, 0.8),
+                0 0 32px 14px rgba(255, 0, 0, 0.5),
+                inset 0 0 16px rgba(255, 0, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 10px 4px rgba(255, 0, 0, 0.6),
+                0 0 20px 10px rgba(255, 0, 0, 0.3),
+                inset 0 0 10px rgba(255, 0, 0, 0.2);
+  }
 }
