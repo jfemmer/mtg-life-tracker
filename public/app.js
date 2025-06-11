@@ -132,7 +132,7 @@ document.getElementById('yourCommander').innerHTML = `
 
 setTimeout(() => {
   const btn = document.getElementById('commanderTaxBtn');
-  const display = document.getElementById('commanderTaxDisplay');
+  const display = document.getElementById('commanderTaxBadge');
   if (btn && display) {
     btn.onclick = () => {
       window.commanderTax += 2;
@@ -182,8 +182,9 @@ function showGameScreen() {
   
   if (taxBtn && taxDisplay) {
     taxBtn.onclick = () => {
-      commanderTax += 2;
-      taxDisplay.textContent = `Tax: $${commanderTax}`;
+      window.commanderTax += 2;
+      const badge = document.getElementById('commanderTaxBadge');
+      if (badge) badge.textContent = `Tax: $${window.commanderTax}`;
     };
   }
     
