@@ -379,31 +379,32 @@ textarea {
   height: 72px;
 }
 
-.commander-tax-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 0.9rem;
-  padding: 6px 10px;
+#commanderTaxWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 4px;
+}
+
+#commanderTaxBtn {
+  font-size: 1rem;
+  padding: 8px 14px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: rebeccapurple;
   color: white;
   cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 0 8px rebeccapurple;
+  box-shadow: 0 0 10px rebeccapurple;
+  transition: background 0.2s ease;
 }
 
-.commander-tax-display {
-  position: absolute;
-  top: 45px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  color: #fff;
-  z-index: 9;
-  pointer-events: none;
-  text-shadow: 0 0 4px black;
+#commanderTaxBtn:hover {
+  background-color: #8254c1;
+}
+
+#commanderTaxDisplay {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px black;
 }
