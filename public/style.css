@@ -411,11 +411,15 @@ textarea {
 
 .tax-badge {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: #222;
-  color: #fff;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  color: gold;
   padding: 4px 8px;
   font-size: 0.8rem;
+  font-weight: bold;
   border-radius: 6px;
+  box-shadow: 0 0 6px rebeccapurple;
+  z-index: 10;
+  pointer-events: none;
 }
