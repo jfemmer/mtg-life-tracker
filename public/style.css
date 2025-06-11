@@ -378,3 +378,32 @@ textarea {
   width: 72px;
   height: 72px;
 }
+
+.commander-tax-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: rebeccapurple;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 0 8px rebeccapurple;
+}
+
+.commander-tax-display {
+  position: absolute;
+  top: 45px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #fff;
+  z-index: 9;
+  pointer-events: none;
+  text-shadow: 0 0 4px black;
+}
