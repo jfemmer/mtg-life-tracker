@@ -131,9 +131,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
       <div class="player-label">${p.name}</div>
       <div class="commander-container${isDead ? ' dead' : ''}">
         <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-             title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-             class="commander-img" />
+            title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+            class="commander-img" />
         ${p.life > 0 ? `<div class="life-overlay">${p.life}</div>` : ''}
+        ${isDead ? `<div class="skull-overlay"></div>` : ''}
       </div>
     </div>
   `;
