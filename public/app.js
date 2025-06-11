@@ -11,9 +11,7 @@ let commanderImage = '';
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('minus').onclick = () => changeLife(-1);
   document.getElementById('plus').onclick = () => changeLife(1);
-});
-
-document.getElementById('commanderName').addEventListener('input', async (e) => {
+  document.getElementById('commanderName').addEventListener('input', async (e) => {
   const query = e.target.value.trim();
   const suggestionList = document.getElementById('commanderSuggestions');
   suggestionList.innerHTML = ''; // Clear old suggestions
@@ -35,6 +33,9 @@ document.getElementById('commanderName').addEventListener('input', async (e) => 
     console.error("❌ Scryfall commander search failed", err);
   }
 });
+
+});
+
 
 
 async function fetchCommanderImage(name) {
