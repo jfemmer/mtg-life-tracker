@@ -231,13 +231,7 @@ button:hover {
   transform: scale(1.03);
 }
 
-/* Custom dropdown hover */
-#commanderDropdown div:hover {
-  background: #291d3a;
-  box-shadow: 0 0 10px rebeccapurple;
-  border-radius: 6px;
-}
-
+/* Commander dropdown styling */
 #commanderDropdown {
   position: absolute;
   top: 100%;
@@ -252,4 +246,23 @@ button:hover {
   max-height: 300px;
   overflow-y: auto;
   backdrop-filter: blur(8px);
+}
+
+/* Dropdown item styles */
+#commanderDropdown div {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+#commanderDropdown div:last-child {
+  border-bottom: none;
+}
+
+#commanderDropdown div:hover {
+  background: #291d3a;
+  box-shadow: 0 0 8px rebeccapurple;
+  border-radius: 8px;
 }
