@@ -171,13 +171,20 @@ h1, h2, h3 {
   z-index: 3;
 }
 
-/* Dead commanders */
 .commander-container.dead {
-  filter: grayscale(100%);
-  border: 2px solid #ff0044;
-  background: linear-gradient(to bottom right, #330000, #110000);
-  box-shadow: 0 0 20px rgba(255, 0, 80, 0.6);
+  background-color: rgba(255, 0, 0, 0.2); /* semi-transparent red */
+  border: 2px solid red;
+  border-radius: 10px;
+  padding: 4px;
 }
+
+/* Red glow underlay for the skull */
+.commander-container.dead .commander-img {
+  position: relative;
+  box-shadow: 0 0 10px 4px red;
+  border-radius: 8px;
+}
+
 .commander-container.dead::after {
   content: "";
   background: url('skull.png') center center no-repeat;
