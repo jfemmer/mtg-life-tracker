@@ -220,7 +220,6 @@ h1, h2, h3 {
 /* Setup screen */
 #setup {
   min-height: 100dvh;
-  padding: 8vh 0; /* add top and bottom breathing room */
   display: flex;
   flex-direction: column;
   justify-content: center;
