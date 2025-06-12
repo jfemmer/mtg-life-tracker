@@ -411,7 +411,7 @@ textarea {
 
 .tax-badge {
   position: absolute;
-  top: 6px;
+  top: 12px;
   right: 6px;
   background: rgba(0, 0, 0, 0.75);
   color: gold;
