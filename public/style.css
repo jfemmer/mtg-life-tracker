@@ -219,13 +219,14 @@ h1, h2, h3 {
 
 /* Setup screen */
 #setup {
-  height: 100vh;
+  min-height: 100dvh;
+  padding: 8vh 0; /* add top and bottom breathing room */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 14px;
-  padding: 20px;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
 /* Inputs */
