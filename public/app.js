@@ -104,6 +104,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
+          <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount || 0}</div>
         </div>
       </div>
     `;
@@ -127,6 +128,7 @@ document.getElementById('yourCommander').innerHTML = `
       ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
       ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
       <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
+      <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount || 0}</div>
     </div>
   </div>
 `;
@@ -179,13 +181,22 @@ function showGameScreen() {
   document.getElementById('plus').disabled = false;
   window.commanderTax = 0;
   
-  if (taxBtn && taxDisplay) {
-    taxBtn.onclick = () => {
-      window.commanderTax += 2;
-      const badge = document.getElementById('commanderTaxBadge');
-      if (badge) badge.textContent = `Tax: $${window.commanderTax}`;
-    };
-  }
+ if (taxBtn && taxDisplay) {
+  taxBtn.onclick = () => {
+    window.commanderTax += 2;
+    const badge = document.getElementById('commanderTaxBadge');
+    if (badge) badge.textContent = `Tax: $${window.commanderTax}`;
+  };
+}
+
+const poisonBtn = document.getElementById('poisonCounterBtn');
+const poisonDisplay = document.getElementById('poisonBadge');
+if (poisonBtn && poisonDisplay) {
+  poisonBtn.onclick = () => {
+    window.poisonCount = (window.poisonCount || 0) + 1;
+    poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+  };
+}
     
   }
 
