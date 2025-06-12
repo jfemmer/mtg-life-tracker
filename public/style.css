@@ -431,18 +431,20 @@ textarea {
   background: rgba(0, 0, 0, 0.75);
   color: #7fff7f;
 }
+
 #poisonCounterBtn {
   font-size: 1rem;
   padding: 4px 8px;
   border: none;
   border-radius: 10px;
-  background-color: darkgreen;
+  background-color: darkgreen !important;
   color: white;
   cursor: pointer;
   box-shadow: 0 0 10px #7fff7f;
   transition: background 0.2s ease;
   margin-bottom: 10px;
 }
+
 #poisonCounterBtn:hover {
   background-color: green;
 }
