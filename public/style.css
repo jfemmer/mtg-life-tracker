@@ -423,3 +423,25 @@ textarea {
   z-index: 10;
   pointer-events: none;
 }
+
+.poison-badge {
+  top: auto;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #7fff7f;
+}
+#poisonCounterBtn {
+  font-size: 1rem;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background-color: darkgreen;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 10px #7fff7f;
+  transition: background 0.2s ease;
+}
+#poisonCounterBtn:hover {
+  background-color: green;
+}
