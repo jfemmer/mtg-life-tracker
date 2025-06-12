@@ -433,7 +433,7 @@ textarea {
 }
 #poisonCounterBtn {
   font-size: 1rem;
-  padding: 8px 14px;
+  padding: 4px 8px;
   border: none;
   border-radius: 10px;
   background-color: darkgreen;
@@ -441,6 +441,7 @@ textarea {
   cursor: pointer;
   box-shadow: 0 0 10px #7fff7f;
   transition: background 0.2s ease;
+  margin-bottom: 10px;
 }
 #poisonCounterBtn:hover {
   background-color: green;
