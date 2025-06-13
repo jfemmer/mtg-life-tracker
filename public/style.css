@@ -448,3 +448,10 @@ textarea {
 #poisonCounterBtn:hover {
   background-color: green;
 }
+
+.tax-badge span,
+.poison-badge span {
+  display: block;
+  font-size: 1rem;
+  margin-top: 2px;
+}
