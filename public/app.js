@@ -107,9 +107,14 @@ function setupSocket(playerName, commanderName, commanderImage) {
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
-          <div id="poisonBadge" class="tax-badge poison-badge">Poison: </div>
-          ${window.poisonCount}
+          <div id="commanderTaxBadge" class="tax-badge">
+            Tax:<br>
+            <span class="tax-value">+${window.commanderTax}</span>
+          </div>
+          <div id="poisonBadge" class="tax-badge poison-badge">
+            Poison:<br>
+            <span class="poison-value">${window.poisonCount}</span>
+          </div>
         </div>
       </div>
     `;
@@ -125,7 +130,8 @@ function setupSocket(playerName, commanderName, commanderImage) {
       poisonBtn.onclick = () => {
         if (window.poisonCount < 10) {
           window.poisonCount += 1;
-          poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+          const poisonValue = poisonDisplay.querySelector('.poison-value');
+          if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
         }
       };
     }
@@ -135,7 +141,8 @@ function setupSocket(playerName, commanderName, commanderImage) {
     if (taxBtn && taxDisplay) {
       taxBtn.onclick = () => {
         window.commanderTax += 2;
-        taxDisplay.textContent = `Tax: +${window.commanderTax}`;
+        const taxValue = taxDisplay.querySelector('.tax-value');
+        if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
       };
     }
   }, 100);
@@ -156,9 +163,14 @@ function setupSocket(playerName, commanderName, commanderImage) {
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
-          <div id="poisonBadge" class="tax-badge poison-badge">Poison: </div>
-          ${window.poisonCount}
+          <div id="commanderTaxBadge" class="tax-badge">
+            Tax:<br>
+            <span class="tax-value">+${window.commanderTax}</span>
+          </div>
+          <div id="poisonBadge" class="tax-badge poison-badge">
+            Poison:<br>
+            <span class="poison-value">${window.poisonCount}</span>
+          </div>
         </div>
       </div>
     `;
@@ -171,7 +183,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
         poisonBtn.onclick = () => {
           if (window.poisonCount < 10) {
             window.poisonCount += 1;
-            poisonDisplay.textContent = `Poison: <div>${window.poisonCount}</div>`;
+            poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
           }
         };
       }
@@ -181,7 +193,8 @@ function setupSocket(playerName, commanderName, commanderImage) {
       if (taxBtn && taxDisplay) {
         taxBtn.onclick = () => {
           window.commanderTax += 2;
-          taxDisplay.textContent = `Tax: +${window.commanderTax}`;
+          const taxValue = taxDisplay.querySelector('.tax-value');
+          if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
         };
       }
     }, 100);
@@ -237,7 +250,8 @@ const poisonDisplay = document.getElementById('poisonBadge');
 if (poisonBtn && poisonDisplay) {
   poisonBtn.onclick = () => {
     window.poisonCount = (window.poisonCount || 0) + 1;
-    poisonDisplay.textContent = `Poison: <div>${window.poisonCount}</div>`;
+    const poisonValue = poisonDisplay.querySelector('.poison-value');
+    if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
   };
 }
     
