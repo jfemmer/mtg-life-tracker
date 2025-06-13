@@ -130,19 +130,19 @@ function setupSocket(playerName, commanderName, commanderImage) {
       poisonBtn.onclick = () => {
         if (window.poisonCount < 10) {
           window.poisonCount += 1;
-
           const poisonValue = poisonDisplay.querySelector('.poison-value');
           if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+
+          // Notify server
+          socket.emit('updatePoison', { poisonCount: window.poisonCount });
 
           if (window.poisonCount >= 10) {
             const container = document.querySelector('.commander-container');
             if (container) container.classList.add('dead');
 
-            // Remove life total overlay if it exists
             const lifeOverlay = container.querySelector('.life-overlay');
             if (lifeOverlay) lifeOverlay.remove();
 
-            // Add skull overlay if not already present
             if (!container.querySelector('.skull-overlay')) {
               const skull = document.createElement('div');
               skull.classList.add('skull-overlay', 'your-skull');
