@@ -79,6 +79,20 @@ socket.on('updatePoison', ({ poisonCount }) => {
   });
 });
 
+socket.on('resetGame', () => {
+  const game = games[gameCode];
+  if (!game) return;
+
+  for (const player of game.players) {
+    player.life = 40;
+    player.poisonCount = 0;
+    // You can extend this if you later track commanderTax on server
+  }
+
+  io.to(gameCode).emit('players', { players: game.players });
+});
+
+
 app.get('/', (req, res) => {
   res.send('MTG Life Tracker backend is running');
 });
