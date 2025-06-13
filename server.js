@@ -71,14 +71,6 @@ socket.on('updatePoison', ({ poisonCount }) => {
   }
 });
 
-  socket.on('disconnect', () => {
-    if (gameCode && games[gameCode]) {
-      games[gameCode].players = games[gameCode].players.filter(p => p.id !== playerId);
-      io.to(gameCode).emit('players', { players: games[gameCode].players });
-    }
-  });
-});
-
 socket.on('resetGame', () => {
   const game = games[gameCode];
   if (!game) return;
@@ -90,6 +82,14 @@ socket.on('resetGame', () => {
   }
 
   io.to(gameCode).emit('players', { players: game.players });
+});
+
+  socket.on('disconnect', () => {
+    if (gameCode && games[gameCode]) {
+      games[gameCode].players = games[gameCode].players.filter(p => p.id !== playerId);
+      io.to(gameCode).emit('players', { players: games[gameCode].players });
+    }
+  });
 });
 
 
