@@ -130,17 +130,24 @@ function setupSocket(playerName, commanderName, commanderImage) {
       poisonBtn.onclick = () => {
         if (window.poisonCount < 10) {
           window.poisonCount += 1;
+
           const poisonValue = poisonDisplay.querySelector('.poison-value');
           if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
-          // Trigger death if poison reaches 10
           if (window.poisonCount >= 10) {
             const container = document.querySelector('.commander-container');
             if (container) container.classList.add('dead');
 
-            const skull = document.createElement('div');
-            skull.classList.add('skull-overlay', 'your-skull');
-            document.querySelector('.commander-container')?.appendChild(skull);
+            // Remove life total overlay if it exists
+            const lifeOverlay = container.querySelector('.life-overlay');
+            if (lifeOverlay) lifeOverlay.remove();
+
+            // Add skull overlay if not already present
+            if (!container.querySelector('.skull-overlay')) {
+              const skull = document.createElement('div');
+              skull.classList.add('skull-overlay', 'your-skull');
+              container.appendChild(skull);
+            }
           }
         }
       };
@@ -192,19 +199,26 @@ function setupSocket(playerName, commanderName, commanderImage) {
       if (poisonBtn && poisonDisplay) {
         poisonBtn.onclick = () => {
           if (window.poisonCount < 10) {
-              window.poisonCount += 1;
-              const poisonValue = poisonDisplay.querySelector('.poison-value');
-              if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+            window.poisonCount += 1;
 
-              // Trigger death if poison reaches 10
-              if (window.poisonCount >= 10) {
-                const container = document.querySelector('.commander-container');
-                if (container) container.classList.add('dead');
+            const poisonValue = poisonDisplay.querySelector('.poison-value');
+            if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
+            if (window.poisonCount >= 10) {
+              const container = document.querySelector('.commander-container');
+              if (container) container.classList.add('dead');
+
+              // Remove life total overlay if it exists
+              const lifeOverlay = container.querySelector('.life-overlay');
+              if (lifeOverlay) lifeOverlay.remove();
+
+              // Add skull overlay if not already present
+              if (!container.querySelector('.skull-overlay')) {
                 const skull = document.createElement('div');
                 skull.classList.add('skull-overlay', 'your-skull');
-                document.querySelector('.commander-container')?.appendChild(skull);
+                container.appendChild(skull);
               }
+            }
           }
         };
       }
