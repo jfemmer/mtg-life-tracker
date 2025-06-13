@@ -107,20 +107,18 @@ function setupSocket(playerName, commanderName, commanderImage) {
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          
           <div id="commanderTaxBadge" class="tax-badge">
-            <div class="label">Tax:</div>
-            <div class="tax-value">+${window.commanderTax}</div>
+            Tax:<br>
+            <span class="tax-value">+${window.commanderTax}</span>
           </div>
-
           <div id="poisonBadge" class="tax-badge poison-badge">
-            <div class="label">Poison:</div>
-            <div class="poison-value">${window.poisonCount}</div>
+            Poison:<br>
+            <span class="poison-value">${window.poisonCount}</span>
           </div>
         </div>
       </div>
-          `;
-      }
+    `;
+  }
 
   showGameScreen();
 
