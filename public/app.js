@@ -171,7 +171,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
         poisonBtn.onclick = () => {
           if (window.poisonCount < 10) {
             window.poisonCount += 1;
-            poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+            poisonDisplay.textContent = `Poison: <div>${window.poisonCount}</div>`;
           }
         };
       }
@@ -237,7 +237,7 @@ const poisonDisplay = document.getElementById('poisonBadge');
 if (poisonBtn && poisonDisplay) {
   poisonBtn.onclick = () => {
     window.poisonCount = (window.poisonCount || 0) + 1;
-    poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+    poisonDisplay.textContent = `Poison: <div>${window.poisonCount}</div>`;
   };
 }
     
