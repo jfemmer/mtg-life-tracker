@@ -34,26 +34,42 @@ io.on('connection', (socket) => {
 
 socket.on('join', ({ gameCode: code, name, commanderName, commanderImage }) => {
   gameCode = code;
-  const player = { id: playerId, name, life: 40, commanderName, commanderImage };
+  const player = {
+    id: playerId,
+    name,
+    life: 40,
+    commanderName,
+    commanderImage,
+    poisonCount: 0
+  };
 
   if (!games[gameCode]) games[gameCode] = { players: [] };
   games[gameCode].players.push(player);
 
   socket.join(gameCode);
-  socket.emit('joined', { playerId, gameCode, player }); // ✅ include `player` here
+  socket.emit('joined', { playerId, gameCode, player });
   io.to(gameCode).emit('players', { players: games[gameCode].players });
 });
 
+socket.on('updateLife', ({ life }) => {
+  const game = games[gameCode];
+  if (!game) return;
+  const player = game.players.find(p => p.id === playerId);
+  if (player) {
+    player.life = life;
+    io.to(gameCode).emit('players', { players: game.players });
+  }
+});
 
-  socket.on('updateLife', ({ life }) => {
-    const game = games[gameCode];
-    if (!game) return;
-    const player = game.players.find(p => p.id === playerId);
-    if (player) {
-      player.life = life;
-      io.to(gameCode).emit('players', { players: game.players });
-    }
-  });
+socket.on('updatePoison', ({ poisonCount }) => {
+  const game = games[gameCode];
+  if (!game) return;
+  const player = game.players.find(p => p.id === playerId);
+  if (player) {
+    player.poisonCount = poisonCount;
+    io.to(gameCode).emit('players', { players: game.players });
+  }
+});
 
   socket.on('disconnect', () => {
     if (gameCode && games[gameCode]) {
