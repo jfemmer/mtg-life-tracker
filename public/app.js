@@ -11,6 +11,15 @@ let commanderImage = '';
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('minus').onclick = () => changeLife(-1);
   document.getElementById('plus').onclick = () => changeLife(1);
+  document.getElementById('resetBtn').onclick = () => {
+    if (confirm('Are you sure you want to reset all life, poison, and tax?')) {
+      socket.emit('resetGame');
+      myLife = 40;
+      window.commanderTax = 0;
+      window.poisonCount = 0;
+      updateCommanderUI();
+    }
+  };
   document.getElementById('commanderName').addEventListener('input', async (e) => {
   const query = e.target.value.trim();
   const dropdown = document.getElementById('commanderDropdown');
@@ -298,6 +307,7 @@ if (poisonBtn && poisonDisplay) {
 async function handleCreateGame() {
   playerName = document.getElementById('playerName').value.trim();
   commanderName = document.getElementById('commanderName').value.trim();
+  document.getElementById('resetBtn').style.display = isHost ? 'inline-block' : 'none';
 
   if (!playerName || !commanderName) {
     alert("Please enter both your name and your commander's name.");
@@ -340,6 +350,31 @@ async function handleJoinGame() {
     }
   }, 1000); // 1 second delay as buffer
 }
+
+function updateCommanderUI() {
+  const lifeOverlay = document.querySelector('.life-overlay');
+  if (lifeOverlay) lifeOverlay.textContent = myLife;
+
+  const taxValue = document.querySelector('.tax-value');
+  if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
+
+  const poisonValue = document.querySelector('.poison-value');
+  if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+
+  const container = document.querySelector('.commander-container');
+  if (container) {
+    container.classList.remove('dead');
+    if (!document.querySelector('.life-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.classList.add('life-overlay');
+      overlay.textContent = myLife;
+      container.appendChild(overlay);
+    }
+    const skull = container.querySelector('.skull-overlay');
+    if (skull) skull.remove();
+  }
+}
+
 
 window.handleCreateGame = handleCreateGame;
 window.handleJoinGame = handleJoinGame;
