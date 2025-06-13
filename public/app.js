@@ -237,7 +237,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
   const commanderImgs = others.map(p => {
   const isLifeDead = p.life <= 0;
-  const isPoisonDead = (p.poisonCount || 0) >= 10;
+  const isPoisonDead = Number(p.poisonCount) >= 10;
   const isDead = isLifeDead || isPoisonDead;
 
   return `
