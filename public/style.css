@@ -422,35 +422,14 @@ textarea {
   box-shadow: 0 0 6px rebeccapurple;
   z-index: 10;
   pointer-events: none;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.2;
-  text-align: center;
 }
 
 .poison-badge {
-  position: absolute;
+  top: auto;
   bottom: 20px;
   right: 14px;
   background: rgba(0, 0, 0, 0.75);
   color: #7fff7f;
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 6px;
-  box-shadow: 0 0 6px rebeccapurple;
-  z-index: 10;
-  pointer-events: none;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.2;
-  text-align: center;
 }
 
 #poisonCounterBtn {
@@ -470,17 +449,3 @@ textarea {
   background-color: green;
 }
 
-.tax-badge span,
-.poison-badge span {
-  display: block;
-  font-size: 1rem;
-  margin-top: 3px;
-}
-
-.poison-badge span {
-  margin-bottom: 12px;
-}
-
-.tax-badge span{
-  margin-right: 10px;
-}
