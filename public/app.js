@@ -97,14 +97,18 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
   const me = data.player;
   if (me) {
+    // Set defaults if not already present
+    window.commanderTax = window.commanderTax || 0;
+    window.poisonCount = window.poisonCount || 0;
+
     document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
         <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
-          <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount || 0}</div>
+          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
+          <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount}</div>
         </div>
       </div>
     `;
@@ -112,13 +116,13 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
   showGameScreen();
 
-  // Re-bind tax and poison button logic after DOM updates
+  // Bind button click events after DOM update
   setTimeout(() => {
     const poisonBtn = document.getElementById('poisonCounterBtn');
     const poisonDisplay = document.getElementById('poisonBadge');
     if (poisonBtn && poisonDisplay) {
       poisonBtn.onclick = () => {
-        window.poisonCount = (window.poisonCount || 0) + 1;
+        window.poisonCount += 1;
         poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
       };
     }
@@ -127,7 +131,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const taxDisplay = document.getElementById('commanderTaxBadge');
     if (taxBtn && taxDisplay) {
       taxBtn.onclick = () => {
-        window.commanderTax = (window.commanderTax || 0) + 2;
+        window.commanderTax += 2;
         taxDisplay.textContent = `Tax: +${window.commanderTax}`;
       };
     }
@@ -135,54 +139,66 @@ function setupSocket(playerName, commanderName, commanderImage) {
 });
 
   socket.on('players', (data) => {
-    const others = data.players.filter(p => p.id !== myId);
-    const me = data.players.find(p => p.id === myId);
+  const others = data.players.filter(p => p.id !== myId);
+  const me = data.players.find(p => p.id === myId);
 
-    if (me) {
-  myLife = me.life;
-  if (!window.commanderTax) window.commanderTax = 0;
+  if (me) {
+    myLife = me.life;
+    window.commanderTax = window.commanderTax || 0;
+    window.poisonCount = window.poisonCount || 0;
 
-document.getElementById('yourCommander').innerHTML = `
-  <div class="commander-spotlight">
-    <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-      <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-      ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
-      ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-      <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax || 0}</div>
-      <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount || 0}</div>
-    </div>
-  </div>
-`;
-
-setTimeout(() => {
-  const btn = document.getElementById('commanderTaxBtn');
-  const display = document.getElementById('commanderTaxBadge');
-  if (btn && display) {
-    btn.onclick = () => {
-      window.commanderTax += 2;
-      display.textContent = `Tax: +${window.commanderTax}`;
-    };
-  }
-}, 100); // wait for DOM render
-}
-
-    const commanderImgs = others.map(p => {
-  const isDead = p.life <= 0;
-  return `
-    <div class="commander-wrapper">
-      <div class="player-label">${p.name}</div>
-      <div class="commander-container${isDead ? ' dead' : ''}">
-        <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-            title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-            class="commander-img" />
-        ${p.life > 0 ? `<div class="life-overlay">${p.life}</div>` : ''}
-        ${isDead ? `<div class="skull-overlay"></div>` : ''}
+    document.getElementById('yourCommander').innerHTML = `
+      <div class="commander-spotlight">
+        <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
+          <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+          ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
+          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
+          <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount}</div>
+        </div>
       </div>
-    </div>
-  `;
-}).join('');
-    document.getElementById('otherCommanders').innerHTML = commanderImgs;
-  });
+    `;
+
+    // Rebind buttons after DOM render
+    setTimeout(() => {
+      const poisonBtn = document.getElementById('poisonCounterBtn');
+      const poisonDisplay = document.getElementById('poisonBadge');
+      if (poisonBtn && poisonDisplay) {
+        poisonBtn.onclick = () => {
+          window.poisonCount += 1;
+          poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+        };
+      }
+
+      const taxBtn = document.getElementById('commanderTaxBtn');
+      const taxDisplay = document.getElementById('commanderTaxBadge');
+      if (taxBtn && taxDisplay) {
+        taxBtn.onclick = () => {
+          window.commanderTax += 2;
+          taxDisplay.textContent = `Tax: +${window.commanderTax}`;
+        };
+      }
+    }, 100);
+  }
+
+  const commanderImgs = others.map(p => {
+    const isDead = p.life <= 0;
+    return `
+      <div class="commander-wrapper">
+        <div class="player-label">${p.name}</div>
+        <div class="commander-container${isDead ? ' dead' : ''}">
+          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+              class="commander-img" />
+          ${p.life > 0 ? `<div class="life-overlay">${p.life}</div>` : ''}
+          ${isDead ? `<div class="skull-overlay"></div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('otherCommanders').innerHTML = commanderImgs;
+});
 }
 
 function changeLife(amount) {
