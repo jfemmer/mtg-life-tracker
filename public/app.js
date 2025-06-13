@@ -92,12 +92,12 @@ function setupSocket(playerName, commanderName, commanderImage) {
   });
 
   socket.on('joined', (data) => {
-    myId = data.playerId;
-    gameCode = data.gameCode;
+  myId = data.playerId;
+  gameCode = data.gameCode;
 
-    const me = data.player;
-    if (me) {
-      document.getElementById('yourCommander').innerHTML = `
+  const me = data.player;
+  if (me) {
+    document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
         <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
@@ -108,10 +108,31 @@ function setupSocket(playerName, commanderName, commanderImage) {
         </div>
       </div>
     `;
+  }
+
+  showGameScreen();
+
+  // Re-bind tax and poison button logic after DOM updates
+  setTimeout(() => {
+    const poisonBtn = document.getElementById('poisonCounterBtn');
+    const poisonDisplay = document.getElementById('poisonBadge');
+    if (poisonBtn && poisonDisplay) {
+      poisonBtn.onclick = () => {
+        window.poisonCount = (window.poisonCount || 0) + 1;
+        poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+      };
     }
 
-    showGameScreen();
-  });
+    const taxBtn = document.getElementById('commanderTaxBtn');
+    const taxDisplay = document.getElementById('commanderTaxBadge');
+    if (taxBtn && taxDisplay) {
+      taxBtn.onclick = () => {
+        window.commanderTax = (window.commanderTax || 0) + 2;
+        taxDisplay.textContent = `Tax: +${window.commanderTax}`;
+      };
+    }
+  }, 100);
+});
 
   socket.on('players', (data) => {
     const others = data.players.filter(p => p.id !== myId);
