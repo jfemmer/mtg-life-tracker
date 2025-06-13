@@ -426,8 +426,8 @@ textarea {
 
 .poison-badge {
   top: auto;
-  bottom: 6px;
-  right: 6px;
+  bottom: 15px;
+  right: 15px;
   background: rgba(0, 0, 0, 0.75);
   color: #7fff7f;
 }
@@ -442,8 +442,7 @@ textarea {
   cursor: pointer;
   box-shadow: 0 0 10px #7fff7f;
   transition: background 0.2s ease;
-  margin-bottom: 20px;
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 #poisonCounterBtn:hover {
