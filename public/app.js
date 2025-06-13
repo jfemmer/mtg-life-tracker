@@ -7,6 +7,7 @@ let gameCode = null;
 let playerName = '';
 let commanderName = '';
 let commanderImage = '';
+let isHost = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('minus').onclick = () => changeLife(-1);
@@ -282,6 +283,7 @@ function showGameScreen() {
   document.getElementById('gameCodeDisplay').textContent = gameCode;
   document.getElementById('minus').disabled = false;
   document.getElementById('plus').disabled = false;
+  document.getElementById('resetBtn').style.display = isHost ? 'inline-block' : 'none';
   window.commanderTax = 0;
   
  if (taxBtn && taxDisplay) {
@@ -307,12 +309,13 @@ if (poisonBtn && poisonDisplay) {
 async function handleCreateGame() {
   playerName = document.getElementById('playerName').value.trim();
   commanderName = document.getElementById('commanderName').value.trim();
-  document.getElementById('resetBtn').style.display = isHost ? 'inline-block' : 'none';
 
   if (!playerName || !commanderName) {
     alert("Please enter both your name and your commander's name.");
     return;
   }
+
+  isHost = true; // 👈 THIS LINE SETS THE HOST
 
   commanderImage = await fetchCommanderImage(commanderName);
 
