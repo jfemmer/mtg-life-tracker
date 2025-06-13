@@ -122,8 +122,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const poisonDisplay = document.getElementById('poisonBadge');
     if (poisonBtn && poisonDisplay) {
       poisonBtn.onclick = () => {
-        window.poisonCount += 1;
-        poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+        if (window.poisonCount < 10) {
+          window.poisonCount += 1;
+          poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+        }
       };
     }
 
@@ -165,8 +167,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
       const poisonDisplay = document.getElementById('poisonBadge');
       if (poisonBtn && poisonDisplay) {
         poisonBtn.onclick = () => {
-          window.poisonCount += 1;
-          poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+          if (window.poisonCount < 10) {
+            window.poisonCount += 1;
+            poisonDisplay.textContent = `Poison: ${window.poisonCount}`;
+          }
         };
       }
 
