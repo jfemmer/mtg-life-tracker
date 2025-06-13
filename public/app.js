@@ -107,8 +107,9 @@ function setupSocket(playerName, commanderName, commanderImage) {
           <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">Tax: </br>+${window.commanderTax}</div>
-          <div id="poisonBadge" class="tax-badge poison-badge">Poison: </br>${window.poisonCount}</div>
+          <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
+          <div id="poisonBadge" class="tax-badge poison-badge">Poison: </div>
+          ${window.poisonCount}
         </div>
       </div>
     `;
@@ -156,7 +157,8 @@ function setupSocket(playerName, commanderName, commanderImage) {
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">Tax: +${window.commanderTax}</div>
-          <div id="poisonBadge" class="tax-badge poison-badge">Poison: ${window.poisonCount}</div>
+          <div id="poisonBadge" class="tax-badge poison-badge">Poison: </div>
+          ${window.poisonCount}
         </div>
       </div>
     `;
