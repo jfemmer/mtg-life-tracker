@@ -449,3 +449,26 @@ textarea {
   background-color: green;
 }
 
+.clickable-overlay {
+  position: relative;
+  width: 100%;
+  max-height: 35vh;
+}
+
+.click-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.click-zone.left {
+  left: 0;
+}
+
+.click-zone.right {
+  right: 0;
+}
+
