@@ -127,7 +127,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
             <div class="click-zone right"></div>
             <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           </div>
-          ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+          ${me.life > 0 ? `<div class="life-overlay" id="lifeOverlay">
+            <span id="lifeDisplay">${me.life}</span>
+            <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
+          </div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
@@ -153,6 +156,37 @@ function setupSocket(playerName, commanderName, commanderImage) {
       rightZone.addEventListener('click', () => changeLife(1)); // fallback
     }
   }
+
+  const lifeOverlay = document.getElementById('lifeOverlay');
+    const lifeDisplay = document.getElementById('lifeDisplay');
+    const lifeInput = document.getElementById('lifeInput');
+
+    if (lifeOverlay && lifeDisplay && lifeInput) {
+      lifeOverlay.addEventListener('click', () => {
+        lifeInput.value = myLife;
+        lifeDisplay.style.display = 'none';
+        lifeInput.style.display = 'inline';
+        lifeInput.focus();
+      });
+
+      const commitLifeChange = () => {
+        const parsed = parseInt(lifeInput.value);
+        if (!isNaN(parsed) && parsed >= 0) {
+          myLife = parsed;
+          lifeDisplay.textContent = myLife;
+          socket.emit('updateLife', { life: myLife });
+        }
+        lifeInput.style.display = 'none';
+        lifeDisplay.style.display = 'inline';
+      };
+
+      lifeInput.addEventListener('blur', commitLifeChange);
+      lifeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          commitLifeChange();
+        }
+      });
+    }
 
   showGameScreen();
 
@@ -216,7 +250,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
             <div class="click-zone right"></div>
             <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
           </div>
-          ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
+          ${me.life > 0 ? `<div class="life-overlay" id="lifeOverlay">
+            <span id="lifeDisplay">${me.life}</span>
+            <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
+          </div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
@@ -240,6 +277,37 @@ function setupSocket(playerName, commanderName, commanderImage) {
     if (rightZone) {
       rightZone.addEventListener('touchstart', () => changeLife(1));
       rightZone.addEventListener('click', () => changeLife(1)); // fallback
+    }
+
+    const lifeOverlay = document.getElementById('lifeOverlay');
+    const lifeDisplay = document.getElementById('lifeDisplay');
+    const lifeInput = document.getElementById('lifeInput');
+
+    if (lifeOverlay && lifeDisplay && lifeInput) {
+      lifeOverlay.addEventListener('click', () => {
+        lifeInput.value = myLife;
+        lifeDisplay.style.display = 'none';
+        lifeInput.style.display = 'inline';
+        lifeInput.focus();
+      });
+
+      const commitLifeChange = () => {
+        const parsed = parseInt(lifeInput.value);
+        if (!isNaN(parsed) && parsed >= 0) {
+          myLife = parsed;
+          lifeDisplay.textContent = myLife;
+          socket.emit('updateLife', { life: myLife });
+        }
+        lifeInput.style.display = 'none';
+        lifeDisplay.style.display = 'inline';
+      };
+
+      lifeInput.addEventListener('blur', commitLifeChange);
+      lifeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          commitLifeChange();
+        }
+      });
     }
 
     // Rebind buttons after DOM render
