@@ -466,8 +466,8 @@ textarea {
   border: none;
   text-align: center;
   z-index: 10;
-  width: 100px; /* Explicit width helps match overlay */
-  height: 4rem;  /* Helps match vertical size */
+  width: 200px; /* Explicit width helps match overlay */
+  height: 10rem;  /* Helps match vertical size */
   line-height: 1;
   padding: 0;
   margin: 0;
