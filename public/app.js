@@ -10,8 +10,16 @@ let commanderImage = '';
 let isHost = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('minus').onclick = () => changeLife(-1);
-  document.getElementById('plus').onclick = () => changeLife(1);
+  // Remove default +/- button listeners, switching to image click zones
+
+  // Delay binding until DOM and commander HTML is rendered
+  setTimeout(() => {
+    const leftZone = document.querySelector('.click-zone.left');
+    const rightZone = document.querySelector('.click-zone.right');
+    if (leftZone) leftZone.onclick = () => changeLife(-1);
+    if (rightZone) rightZone.onclick = () => changeLife(1);
+  }, 100);
+
   document.getElementById('resetBtn').onclick = () => {
     if (confirm('Are you sure you want to reset all life, poison, and tax?')) {
       socket.emit('resetGame');
@@ -114,7 +122,11 @@ function setupSocket(playerName, commanderName, commanderImage) {
     document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
         <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-          <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          <div class="clickable-overlay">
+            <div class="click-zone left"></div>
+            <div class="click-zone right"></div>
+            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          </div>
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
@@ -187,7 +199,11 @@ function setupSocket(playerName, commanderName, commanderImage) {
     document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
         <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-          <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          <div class="clickable-overlay">
+            <div class="click-zone left"></div>
+            <div class="click-zone right"></div>
+            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          </div>
           ${me.life > 0 ? `<div class="life-overlay">${me.life}</div>` : ''}
           ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
