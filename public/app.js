@@ -141,12 +141,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
       </div>
     `;
 
-    setTimeout(() => {
-  const leftZone = document.querySelector('.click-zone.left');
-  const rightZone = document.querySelector('.click-zone.right');
-  if (leftZone) leftZone.onclick = () => changeLife(-1);
-  if (rightZone) rightZone.onclick = () => changeLife(1);
-}, 50);
+    const leftZone = document.querySelector('.click-zone.left');
+    const rightZone = document.querySelector('.click-zone.right');
+    if (leftZone) leftZone.onclick = () => changeLife(-1);
+    if (rightZone) rightZone.onclick = () => changeLife(1);
   }
 
   showGameScreen();
@@ -225,12 +223,10 @@ function setupSocket(playerName, commanderName, commanderImage) {
       </div>
     `;
 
-    setTimeout(() => {
-  const leftZone = document.querySelector('.click-zone.left');
-  const rightZone = document.querySelector('.click-zone.right');
-  if (leftZone) leftZone.onclick = () => changeLife(-1);
-  if (rightZone) rightZone.onclick = () => changeLife(1);
-}, 50);
+    const leftZone = document.querySelector('.click-zone.left');
+    const rightZone = document.querySelector('.click-zone.right');
+    if (leftZone) leftZone.onclick = () => changeLife(-1);
+    if (rightZone) rightZone.onclick = () => changeLife(1);
 
     // Rebind buttons after DOM render
     setTimeout(() => {
