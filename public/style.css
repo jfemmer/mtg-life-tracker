@@ -449,3 +449,14 @@ textarea {
 .click-zone.right {
   right: 0;
 }
+
+#lifeInput {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  background: transparent;
+  color: white;
+  border: none;
+  outline: none;
+  width: 80px;
+}
