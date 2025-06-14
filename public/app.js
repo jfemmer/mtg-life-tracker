@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Delay binding until DOM and commander HTML is rendered
   setTimeout(() => {
-    const leftZone = document.querySelector('.click-zone.left');
-    const rightZone = document.querySelector('.click-zone.right');
-    if (leftZone) leftZone.onclick = () => changeLife(-1);
-    if (rightZone) rightZone.onclick = () => changeLife(1);
-  }, 100);
+  const leftZone = document.querySelector('.click-zone.left');
+  const rightZone = document.querySelector('.click-zone.right');
+  if (leftZone) leftZone.onclick = () => changeLife(-1);
+  if (rightZone) rightZone.onclick = () => changeLife(1);
+}, 50);
 
   document.getElementById('resetBtn').onclick = () => {
     if (confirm('Are you sure you want to reset all life, poison, and tax?')) {
@@ -140,6 +140,13 @@ function setupSocket(playerName, commanderName, commanderImage) {
         </div>
       </div>
     `;
+
+    setTimeout(() => {
+  const leftZone = document.querySelector('.click-zone.left');
+  const rightZone = document.querySelector('.click-zone.right');
+  if (leftZone) leftZone.onclick = () => changeLife(-1);
+  if (rightZone) rightZone.onclick = () => changeLife(1);
+}, 50);
   }
 
   showGameScreen();
@@ -217,6 +224,13 @@ function setupSocket(playerName, commanderName, commanderImage) {
         </div>
       </div>
     `;
+
+    setTimeout(() => {
+  const leftZone = document.querySelector('.click-zone.left');
+  const rightZone = document.querySelector('.click-zone.right');
+  if (leftZone) leftZone.onclick = () => changeLife(-1);
+  if (rightZone) rightZone.onclick = () => changeLife(1);
+}, 50);
 
     // Rebind buttons after DOM render
     setTimeout(() => {
