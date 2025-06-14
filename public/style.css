@@ -136,28 +136,6 @@ h1, h2, h3 {
   width: 100%;
 }
 
-#minus, #plus {
-  font-size: 16px;
-  padding: 14px 20px;
-  width: 40%;
-  max-width: 140px;
-  background: rebeccapurple;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rebeccapurple;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  touch-action: manipulation;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-#minus:hover, #plus:hover {
-  background: #8254c1;
-  transform: scale(1.04);
-}
-
 .life-overlay {
   position: absolute;
   top: 35%;
