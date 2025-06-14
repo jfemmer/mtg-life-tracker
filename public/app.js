@@ -299,7 +299,12 @@ function changeLife(amount) {
   if (newLife < 0) return;
 
   myLife = newLife;
-  console.log(`Life changed to ${myLife}`);
+
+  // ✅ Instant UI update
+  const lifeOverlay = document.querySelector('.life-overlay');
+  if (lifeOverlay) lifeOverlay.textContent = myLife;
+
+  // ✅ Emit to server
   socket.emit('updateLife', { life: myLife });
 }
 
