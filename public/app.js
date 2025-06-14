@@ -253,29 +253,31 @@ function setupSocket(playerName, commanderName, commanderImage) {
     window.poisonCount = window.poisonCount || 0;
 
     document.getElementById('yourCommander').innerHTML = `
-      <div class="commander-spotlight">
-        <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
-          <div class="clickable-overlay">
-            <div class="click-zone left"></div>
-            <div class="click-zone right"></div>
-            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-          </div>
-          ${me.life > 0 ? `<div class="life-overlay" id="lifeOverlay">
+    <div class="commander-spotlight">
+      <div class="commander-container${me.life <= 0 ? ' dead' : ''}">
+        <div class="clickable-overlay">
+          <div class="click-zone left"></div>
+          <div class="click-zone right"></div>
+          <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+        </div>
+        ${me.life > 0 ? `
+          <div class="life-overlay" id="lifeOverlay">
             <span id="lifeDisplay">${me.life}</span>
-            <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
-          </div>` : ''}
-          ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">
-            Tax:<br>
-            <span class="tax-value">+${window.commanderTax}</span>
+            <input type="number" id="lifeInput" class="life-input" inputmode="numeric" pattern="[0-9]*" />
           </div>
-          <div id="poisonBadge" class="tax-badge poison-badge">
-            Poison:<br>
-            <span class="poison-value">${window.poisonCount}</span>
-          </div>
+        ` : ''}
+        ${me.life <= 0 ? `<div class="skull-overlay your-skull"></div>` : ''}
+        <div id="commanderTaxBadge" class="tax-badge">
+          Tax:<br>
+          <span class="tax-value">+${window.commanderTax}</span>
+        </div>
+        <div id="poisonBadge" class="tax-badge poison-badge">
+          Poison:<br>
+          <span class="poison-value">${window.poisonCount}</span>
         </div>
       </div>
-    `;
+    </div>
+  `;
 
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
