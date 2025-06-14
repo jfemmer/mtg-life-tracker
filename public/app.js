@@ -166,36 +166,37 @@ function setupSocket(playerName, commanderName, commanderImage) {
   }
 
   const lifeOverlay = document.getElementById('lifeOverlay');
-    const lifeDisplay = document.getElementById('lifeDisplay');
-    const lifeInput = document.getElementById('lifeInput');
+  const lifeDisplay = document.getElementById('lifeDisplay');
+  const lifeInput = document.getElementById('lifeInput');
 
-    if (lifeOverlay && lifeDisplay && lifeInput) {
-      lifeOverlay.addEventListener('click', () => {
-        e.stopPropagation(); //
-        lifeInput.value = myLife;
-        lifeDisplay.style.display = 'none';
-        lifeInput.style.display = 'inline';
-        lifeInput.focus();
-      });
+  if (lifeOverlay && lifeDisplay && lifeInput) {
+    lifeOverlay.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lifeInput.value = myLife;
+      lifeDisplay.style.display = 'none';
+      lifeInput.style.display = 'inline';
+      lifeInput.focus();
+      lifeInput.select(); // Mobile keyboard should open
+    });
 
-      const commitLifeChange = () => {
-        const parsed = parseInt(lifeInput.value);
-        if (!isNaN(parsed) && parsed >= 0) {
-          myLife = parsed;
-          lifeDisplay.textContent = myLife;
-          socket.emit('updateLife', { life: myLife });
-        }
-        lifeInput.style.display = 'none';
-        lifeDisplay.style.display = 'inline';
-      };
+    const commitLifeChange = () => {
+      const parsed = parseInt(lifeInput.value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        myLife = parsed;
+        lifeDisplay.textContent = myLife;
+        socket.emit('updateLife', { life: myLife });
+      }
+      lifeInput.style.display = 'none';
+      lifeDisplay.style.display = 'inline';
+    };
 
-      lifeInput.addEventListener('blur', commitLifeChange);
-      lifeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          commitLifeChange();
-        }
-      });
-    }
+    lifeInput.addEventListener('blur', commitLifeChange);
+    lifeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        commitLifeChange();
+      }
+    });
+  }
 
   showGameScreen();
 
@@ -278,7 +279,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
-    
+
     if (leftZone) {
       leftZone.addEventListener('click', () => changeLife(-1));
     }
@@ -291,12 +292,13 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const lifeInput = document.getElementById('lifeInput');
 
     if (lifeOverlay && lifeDisplay && lifeInput) {
-      lifeOverlay.addEventListener('click', () => {
-        e.stopPropagation(); //
+      lifeOverlay.addEventListener('click', (e) => {
+        e.stopPropagation();
         lifeInput.value = myLife;
         lifeDisplay.style.display = 'none';
         lifeInput.style.display = 'inline';
         lifeInput.focus();
+        lifeInput.select(); // Mobile keyboard should open
       });
 
       const commitLifeChange = () => {
