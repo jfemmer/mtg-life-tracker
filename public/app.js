@@ -174,6 +174,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     if (lifeOverlay && lifeDisplay && lifeInput) {
       lifeOverlay.addEventListener('click', () => {
+        e.stopPropagation(); //
         lifeInput.value = myLife;
         lifeDisplay.style.display = 'none';
         lifeInput.style.display = 'inline';
@@ -296,6 +297,7 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     if (lifeOverlay && lifeDisplay && lifeInput) {
       lifeOverlay.addEventListener('click', () => {
+        e.stopPropagation(); //
         lifeInput.value = myLife;
         lifeDisplay.style.display = 'none';
         lifeInput.style.display = 'inline';
