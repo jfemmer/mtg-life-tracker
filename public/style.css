@@ -137,7 +137,7 @@ h1, h2, h3 {
 }
 
 .life-overlay {
-  position: relative;
+  position: absolute;
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -146,8 +146,7 @@ h1, h2, h3 {
   color: white;
   text-shadow: 0 0 12px black, 0 0 6px rebeccapurple;
   pointer-events: none;
-  z-index: 2;
-  cursor: pointer;
+  z-index: 3;
 }
 
 .commander-container.dead {
@@ -449,15 +448,4 @@ textarea {
 
 .click-zone.right {
   right: 0;
-}
-
-#lifeInput {
-  font-size: 3rem;
-  font-weight: 900;
-  text-align: center;
-  background: transparent;
-  color: white;
-  border: none;
-  outline: none;
-  width: 80px;
 }
