@@ -451,8 +451,8 @@ textarea {
 
 .clickable-overlay {
   position: relative;
+  display: inline-block;
   width: 100%;
-  max-height: 35vh;
 }
 
 .click-zone {
@@ -460,8 +460,8 @@ textarea {
   top: 0;
   bottom: 0;
   width: 50%;
-  z-index: 2;
-  cursor: pointer;
+  height: 100%;
+  z-index: 5;
 }
 
 .click-zone.left {
@@ -470,8 +470,4 @@ textarea {
 
 .click-zone.right {
   right: 0;
-}
-
-.click-zone {
-  background-color: rgba(255, 0, 0, 0.05); /* light red tint for testing */
 }
