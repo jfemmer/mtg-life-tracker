@@ -159,12 +159,15 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const rightZone = document.querySelector('.click-zone.right');
 
     if (leftZone) {
-      leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
-      leftZone.addEventListener('click', () => changeLife(-1)); // fallback
+      const handleSubtract = preventDoubleTap(() => changeLife(-1));
+      leftZone.addEventListener('touchstart', handleSubtract);
+      leftZone.addEventListener('click', handleSubtract);
     }
+
     if (rightZone) {
-      rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
-      rightZone.addEventListener('click', () => changeLife(1)); // fallback
+      const handleAdd = preventDoubleTap(() => changeLife(1));
+      rightZone.addEventListener('touchstart', handleAdd);
+      rightZone.addEventListener('click', handleAdd);
     }
   }
 
@@ -283,12 +286,15 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const rightZone = document.querySelector('.click-zone.right');
 
     if (leftZone) {
-      leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
-      leftZone.addEventListener('click', () => changeLife(-1)); // fallback
+      const handleSubtract = preventDoubleTap(() => changeLife(-1));
+      leftZone.addEventListener('touchstart', handleSubtract);
+      leftZone.addEventListener('click', handleSubtract);
     }
+
     if (rightZone) {
-      rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
-      rightZone.addEventListener('click', () => changeLife(1)); // fallback
+      const handleAdd = preventDoubleTap(() => changeLife(1));
+      rightZone.addEventListener('touchstart', handleAdd);
+      rightZone.addEventListener('click', handleAdd);
     }
 
     const lifeOverlay = document.getElementById('lifeOverlay');
