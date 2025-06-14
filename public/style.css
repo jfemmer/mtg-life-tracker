@@ -454,15 +454,18 @@ textarea {
 .life-input {
   display: none;
   position: absolute;
-  top: 50%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80px;
-  font-size: 2rem;
+  font-size: 3.5rem;
+  font-weight: 900;
   text-align: center;
-  border-radius: 8px;
-  border: 2px solid white;
-  background: rgba(0, 0, 0, 0.9);
+  border: none;
+  border-radius: 10px;
+  background: transparent;
   color: white;
+  text-shadow: 0 0 12px black, 0 0 6px rebeccapurple;
   z-index: 10;
+  width: auto;
+  outline: none;
 }
