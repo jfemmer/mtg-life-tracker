@@ -445,8 +445,10 @@ textarea {
 
 .click-zone.left {
   left: 0;
+  background: green
 }
 
 .click-zone.right {
   right: 0;
+  background: red
 }
