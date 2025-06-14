@@ -436,9 +436,9 @@ textarea {
 
 .click-zone {
   position: absolute;
-  top: 10%;
-  bottom: 10%;
-  width: 30%;
+  top: 0;
+  bottom: 0;
+  width: 40%;
   height: 100%;
   z-index: 2;
 }
