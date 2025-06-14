@@ -455,7 +455,7 @@ textarea {
   display: none;
   position: absolute;
   transform: translate(-50%, -50%);
-  font-size: 3.5rem;
+  font-size: 5.5 rem;
   font-weight: 900;
   color: white;
   text-shadow: 0 0 12px black, 0 0 6px rebeccapurple;
