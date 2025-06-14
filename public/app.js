@@ -157,22 +157,11 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
     if (leftZone) {
-      if (isTouchDevice) {
-        leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
-      } else {
-        leftZone.addEventListener('click', () => changeLife(-1));
-      }
+      leftZone.addEventListener('click', () => changeLife(-1));
     }
-
     if (rightZone) {
-      if (isTouchDevice) {
-        rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
-      } else {
-        rightZone.addEventListener('click', () => changeLife(1));
-      }
+      rightZone.addEventListener('click', () => changeLife(1));
     }
   }
 
@@ -289,22 +278,12 @@ function setupSocket(playerName, commanderName, commanderImage) {
 
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
+    
     if (leftZone) {
-      if (isTouchDevice) {
-        leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
-      } else {
-        leftZone.addEventListener('click', () => changeLife(-1));
-      }
+      leftZone.addEventListener('click', () => changeLife(-1));
     }
-
     if (rightZone) {
-      if (isTouchDevice) {
-        rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
-      } else {
-        rightZone.addEventListener('click', () => changeLife(1));
-      }
+      rightZone.addEventListener('click', () => changeLife(1));
     }
 
     const lifeOverlay = document.getElementById('lifeOverlay');
