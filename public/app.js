@@ -8,6 +8,17 @@ let playerName = '';
 let commanderName = '';
 let commanderImage = '';
 let isHost = false;
+let lastTapTime = 0;
+
+function preventDoubleTap(callback) {
+  return function () {
+    const now = Date.now();
+    if (now - lastTapTime > 300) {
+      callback();
+    }
+    lastTapTime = now;
+  };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Remove default +/- button listeners, switching to image click zones
@@ -148,11 +159,11 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const rightZone = document.querySelector('.click-zone.right');
 
     if (leftZone) {
-      leftZone.addEventListener('touchstart', () => changeLife(-1));
+      leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
       leftZone.addEventListener('click', () => changeLife(-1)); // fallback
     }
     if (rightZone) {
-      rightZone.addEventListener('touchstart', () => changeLife(1));
+      rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
       rightZone.addEventListener('click', () => changeLife(1)); // fallback
     }
   }
@@ -271,11 +282,11 @@ function setupSocket(playerName, commanderName, commanderImage) {
     const rightZone = document.querySelector('.click-zone.right');
 
     if (leftZone) {
-      leftZone.addEventListener('touchstart', () => changeLife(-1));
+      leftZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(-1)));
       leftZone.addEventListener('click', () => changeLife(-1)); // fallback
     }
     if (rightZone) {
-      rightZone.addEventListener('touchstart', () => changeLife(1));
+      rightZone.addEventListener('touchstart', preventDoubleTap(() => changeLife(1)));
       rightZone.addEventListener('click', () => changeLife(1)); // fallback
     }
 
@@ -383,8 +394,8 @@ function changeLife(amount) {
   myLife = newLife;
 
   // ✅ Instant UI update
-  const lifeOverlay = document.querySelector('.life-overlay');
-  if (lifeOverlay) lifeOverlay.textContent = myLife;
+  const lifeDisplay = document.getElementById('lifeDisplay');
+  if (lifeDisplay) lifeDisplay.textContent = myLife;
 
   // ✅ Emit to server
   socket.emit('updateLife', { life: myLife });
@@ -468,8 +479,8 @@ async function handleJoinGame() {
 }
 
 function updateCommanderUI() {
-  const lifeOverlay = document.querySelector('.life-overlay');
-  if (lifeOverlay) lifeOverlay.textContent = myLife;
+  const lifeDisplay = document.getElementById('lifeDisplay');
+  if (lifeDisplay) lifeDisplay.textContent = myLife;
 
   const taxValue = document.querySelector('.tax-value');
   if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
