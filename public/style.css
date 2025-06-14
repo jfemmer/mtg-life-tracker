@@ -450,5 +450,6 @@ textarea {
 
 .click-zone.right {
   right: 0;
-  background: red
+  background: red;
+  margin-left: 20px;
 }
