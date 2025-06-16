@@ -127,11 +127,7 @@ socket.on('joined', (data) => {
   const me = data.player;
   if (me) {
     window.commanderTax = window.commanderTax || 0;
-    if (me.poisonCount !== window.poisonCount) {
-      window.poisonCount = me.poisonCount;
-    } else {
-      return; // 🔥 Skip redraw if poison already updated locally
-    }
+    window.poisonCount = window.poisonCount || 0;
 
     const isPoisonDead = window.poisonCount >= 10;
     const isLifeDead = me.life <= 0;
@@ -267,131 +263,61 @@ const commitLifeChange = () => {
   });
 });
 
-  socket.on('players', (data) => {
+socket.on('players', (data) => {
   const others = data.players.filter(p => p.id !== myId);
   const me = data.players.find(p => p.id === myId);
 
+  // Only re-render your own commander UI if needed
+  const shouldUpdateSelf =
+    me &&
+    (me.life !== myLife || me.poisonCount !== window.poisonCount);
+
   if (me) {
-    if (me.life !== myLife) {
-      myLife = me.life;
-    } else {
-      return; // 🔥 Skip DOM re-render if no life change
-    }
+    myLife = me.life;
+    window.poisonCount = me.poisonCount;
     window.commanderTax = window.commanderTax || 0;
-    if (me.poisonCount !== window.poisonCount) {
-      window.poisonCount = me.poisonCount;
-    } else {
-      return; // 🔥 Skip redraw if poison already updated locally
-    }
 
     const isPoisonDead = window.poisonCount >= 10;
-    const isLifeDead = me.life <= 0;
+    const isLifeDead = myLife <= 0;
     const isDead = isPoisonDead || isLifeDead;
 
-    document.getElementById('yourCommander').innerHTML = `
-      <div class="commander-spotlight">
-        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
-          <div class="clickable-overlay">
-            <div class="click-zone left"></div>
-            <div class="click-zone right"></div>
-            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-          </div>
-          ${!isDead ? `
-            <div class="life-overlay" id="lifeOverlay">
-              <span id="lifeDisplay">${me.life}</span>
-              <input type="number" id="lifeInput" class="life-input" inputmode="numeric" pattern="[0-9]*" />
+    if (shouldUpdateSelf) {
+      document.getElementById('yourCommander').innerHTML = `
+        <div class="commander-spotlight">
+          <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
+            <div class="clickable-overlay">
+              <div class="click-zone left"></div>
+              <div class="click-zone right"></div>
+              <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
             </div>
-          ` : ''}
-          ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">
-            Tax:<br>
-            <span class="tax-value">+${window.commanderTax}</span>
-          </div>
-          <div id="poisonBadge" class="tax-badge poison-badge">
-            Poison:<br>
-            <span class="poison-value">${window.poisonCount}</span>
+            ${!isDead ? `
+              <div class="life-overlay" id="lifeOverlay">
+                <span id="lifeDisplay">${me.life}</span>
+                <input type="number" id="lifeInput" class="life-input" inputmode="numeric" pattern="[0-9]*" />
+              </div>
+            ` : ''}
+            ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
+            <div id="commanderTaxBadge" class="tax-badge">
+              Tax:<br>
+              <span class="tax-value">+${window.commanderTax}</span>
+            </div>
+            <div id="poisonBadge" class="tax-badge poison-badge">
+              Poison:<br>
+              <span class="poison-value">${window.poisonCount}</span>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
 
-    // Event bindings
-    const leftZone = document.querySelector('.click-zone.left');
-    const rightZone = document.querySelector('.click-zone.right');
-    if (leftZone) leftZone.addEventListener('click', () => changeLife(-1));
-    if (rightZone) rightZone.addEventListener('click', () => changeLife(1));
-
-    const lifeOverlay = document.getElementById('lifeOverlay');
-    const lifeDisplay = document.getElementById('lifeDisplay');
-    const lifeInput = document.getElementById('lifeInput');
-
-    if (lifeOverlay && lifeDisplay && lifeInput) {
-      lifeOverlay.addEventListener('click', (e) => {
-        e.stopPropagation();
-        lifeInput.value = myLife;
-        lifeDisplay.style.display = 'none';
-        lifeInput.style.display = 'inline';
-        lifeInput.focus();
-        lifeInput.select();
-      });
-
-      const commitLifeChange = () => {
-      const parsed = parseInt(lifeInput.value);
-      if (!isNaN(parsed) && parsed >= 0) {
-        socket.emit('updateLife', { life: parsed });
-
-        // Trigger full re-render from server broadcast
-        socket.emit('updateLife', { life: myLife });
-      }
-
-      lifeInput.style.display = 'none';
-      lifeDisplay.style.display = 'inline';
-    };
+      // Rebind all your UI interactions
+      const leftZone = document.querySelector('.click-zone.left');
+      const rightZone = document.querySelector('.click-zone.right');
+      if (leftZone) leftZone.addEventListener('click', () => changeLife(-1));
+      if (rightZone) rightZone.addEventListener('click', () => changeLife(1));
     }
-
-    // Rebind poison and tax buttons
-    setTimeout(() => {
-      const poisonBtn = document.getElementById('poisonCounterBtn');
-      const poisonDisplay = document.getElementById('poisonBadge');
-      if (poisonBtn && poisonDisplay) {
-        poisonBtn.onclick = () => {
-          if (window.poisonCount < 10) {
-            window.poisonCount += 1;
-            const poisonValue = poisonDisplay.querySelector('.poison-value');
-            if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
-            socket.emit('updatePoison', { poisonCount: window.poisonCount });
-
-            if (window.poisonCount >= 10) {
-              const container = document.querySelector('.commander-container');
-              if (container) {
-                container.classList.add('dead', 'poison-dead');
-                const lifeOverlay = container.querySelector('.life-overlay');
-                if (lifeOverlay) lifeOverlay.remove();
-
-                if (!container.querySelector('.skull-overlay')) {
-                  const skull = document.createElement('div');
-                  skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
-                  container.appendChild(skull);
-                }
-              }
-            }
-          }
-        };
-      }
-
-      const taxBtn = document.getElementById('commanderTaxBtn');
-      const taxDisplay = document.getElementById('commanderTaxBadge');
-      if (taxBtn && taxDisplay) {
-        taxBtn.onclick = () => {
-          window.commanderTax += 2;
-          const taxValue = taxDisplay.querySelector('.tax-value');
-          if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
-        };
-      }
-    });
   }
 
-  // Update other players’ commanders
+  // ✅ Always update other players’ commanders
   const commanderImgs = others.map(p => {
     const isPoisonDead = Number(p.poisonCount) >= 10;
     const isLifeDead = p.life <= 0;
