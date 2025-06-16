@@ -146,7 +146,7 @@ socket.on('joined', (data) => {
             <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
           </div>` : ''}
           ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label">☠ Poisoned</div>` : ''}
+          ${isPoisonDead ? `<div class="death-label">☠ Poisoned</div>` : isLifeDead ? `<div class="death-label">☠ Dead</div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
             <span class="tax-value">+${window.commanderTax}</span>
@@ -228,7 +228,6 @@ socket.on('joined', (data) => {
 
               if (!container.querySelector('.death-label')) {
                 const tag = document.createElement('div');
-                tag.textContent = '☠ Poisoned';
                 tag.classList.add('death-label');
                 container.appendChild(tag);
               }
@@ -261,7 +260,7 @@ socket.on('joined', (data) => {
 
     const isPoisonDead = window.poisonCount >= 10;
     const isLifeDead = me.life <= 0;
-    const isDead = isLifeDead || isPoisonDead;
+    const isDead = isPoisonDead || isLifeDead;
 
     document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
@@ -278,7 +277,7 @@ socket.on('joined', (data) => {
             </div>
           ` : ''}
           ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label">☠ Poisoned</div>` : ''}
+          ${isPoisonDead ? `<div class="death-label"></div>` : isLifeDead ? `<div class="death-label"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
             <span class="tax-value">+${window.commanderTax}</span>
@@ -291,6 +290,7 @@ socket.on('joined', (data) => {
       </div>
     `;
 
+    // Event bindings
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
     if (leftZone) leftZone.addEventListener('click', () => changeLife(-1));
@@ -323,13 +323,11 @@ socket.on('joined', (data) => {
 
       lifeInput.addEventListener('blur', commitLifeChange);
       lifeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          commitLifeChange();
-        }
+        if (e.key === 'Enter') commitLifeChange();
       });
     }
 
-    // Rebind buttons after DOM render
+    // Rebind poison and tax buttons
     setTimeout(() => {
       const poisonBtn = document.getElementById('poisonCounterBtn');
       const poisonDisplay = document.getElementById('poisonBadge');
@@ -337,15 +335,14 @@ socket.on('joined', (data) => {
         poisonBtn.onclick = () => {
           if (window.poisonCount < 10) {
             window.poisonCount += 1;
-
             const poisonValue = poisonDisplay.querySelector('.poison-value');
             if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+            socket.emit('updatePoison', { poisonCount: window.poisonCount });
 
             if (window.poisonCount >= 10) {
               const container = document.querySelector('.commander-container');
               if (container) {
                 container.classList.add('dead', 'poison-dead');
-
                 const lifeOverlay = container.querySelector('.life-overlay');
                 if (lifeOverlay) lifeOverlay.remove();
 
@@ -356,10 +353,10 @@ socket.on('joined', (data) => {
                 }
 
                 if (!container.querySelector('.death-label')) {
-                  const tag = document.createElement('div');
-                  tag.textContent = '☠ Poisoned';
-                  tag.classList.add('death-label');
-                  container.appendChild(tag);
+                  const label = document.createElement('div');
+                  label.textContent = '☠ Poisoned';
+                  label.classList.add('death-label');
+                  container.appendChild(label);
                 }
               }
             }
@@ -379,6 +376,30 @@ socket.on('joined', (data) => {
     }, 100);
   }
 
+  // Update other players’ commanders
+  const commanderImgs = others.map(p => {
+    const isPoisonDead = Number(p.poisonCount) >= 10;
+    const isLifeDead = p.life <= 0;
+    const isDead = isPoisonDead || isLifeDead;
+
+    return `
+      <div class="commander-wrapper">
+        <div class="player-label">${p.name}</div>
+        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
+          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+               title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+               class="commander-img" />
+          ${!isDead ? `<div class="life-overlay">${p.life}</div>` : ''}
+          ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
+          ${isPoisonDead ? `<div class="death-label"></div>` : isLifeDead ? `<div class="death-label"></div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('otherCommanders').innerHTML = commanderImgs;
+});
+
   // Render other players
   const commanderImgs = others.map(p => {
     const isPoisonDead = Number(p.poisonCount) >= 10;
@@ -394,15 +415,15 @@ socket.on('joined', (data) => {
               class="commander-img" />
           ${(!isDead) ? `<div class="life-overlay">${p.life}</div>` : ''}
           ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label">☠ Poisoned</div>` : ''}
+          ${isPoisonDead ? `<div class="death-label"></div>` : ''}
         </div>
       </div>
     `;
   }).join('');
 
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
-});
-}
+};
+
 
 function changeLife(amount) {
   const newLife = myLife + amount;
