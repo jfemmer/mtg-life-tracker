@@ -181,8 +181,7 @@ socket.on('joined', (data) => {
 const commitLifeChange = () => {
   const parsed = parseInt(lifeInput.value);
   if (!isNaN(parsed) && parsed >= 0) {
-    myLife = parsed;
-    lifeDisplay.textContent = myLife;
+    socket.emit('updateLife', { life: parsed });
 
     // Instant DOM update before server reply
     const container = document.querySelector('.commander-container');
@@ -324,10 +323,7 @@ const commitLifeChange = () => {
       const commitLifeChange = () => {
       const parsed = parseInt(lifeInput.value);
       if (!isNaN(parsed) && parsed >= 0) {
-        myLife = parsed;
-
-        // Immediately update the text for responsiveness
-        lifeDisplay.textContent = myLife;
+        socket.emit('updateLife', { life: parsed });
 
         // Trigger full re-render from server broadcast
         socket.emit('updateLife', { life: myLife });
