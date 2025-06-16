@@ -146,7 +146,6 @@ socket.on('joined', (data) => {
             <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
           </div>` : ''}
           ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label">☠ Poisoned</div>` : isLifeDead ? `<div class="death-label">☠ Dead</div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
             <span class="tax-value">+${window.commanderTax}</span>
@@ -179,16 +178,33 @@ socket.on('joined', (data) => {
       lifeInput.select();
     });
 
-    const commitLifeChange = () => {
-      const parsed = parseInt(lifeInput.value);
-      if (!isNaN(parsed) && parsed >= 0) {
-        myLife = parsed;
-        lifeDisplay.textContent = myLife;
-        socket.emit('updateLife', { life: myLife });
+const commitLifeChange = () => {
+  const parsed = parseInt(lifeInput.value);
+  if (!isNaN(parsed) && parsed >= 0) {
+    myLife = parsed;
+    lifeDisplay.textContent = myLife;
+    socket.emit('updateLife', { life: myLife });
+
+    if (myLife <= 0) {
+      const container = document.querySelector('.commander-container');
+      if (container) {
+        container.classList.add('dead');
+
+        const lifeOverlay = container.querySelector('.life-overlay');
+        if (lifeOverlay) lifeOverlay.remove();
+
+        if (!container.querySelector('.skull-overlay')) {
+          const skull = document.createElement('div');
+          skull.classList.add('skull-overlay', 'your-skull');
+          container.appendChild(skull);
+        }
       }
-      lifeInput.style.display = 'none';
-      lifeDisplay.style.display = 'inline';
-    };
+    }
+  }
+
+  lifeInput.style.display = 'none';
+  lifeDisplay.style.display = 'inline';
+};
 
     lifeInput.addEventListener('blur', commitLifeChange);
     lifeInput.addEventListener('keydown', (e) => {
@@ -224,12 +240,6 @@ socket.on('joined', (data) => {
                 const skull = document.createElement('div');
                 skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
                 container.appendChild(skull);
-              }
-
-              if (!container.querySelector('.death-label')) {
-                const tag = document.createElement('div');
-                tag.classList.add('death-label');
-                container.appendChild(tag);
               }
             }
           }
@@ -277,7 +287,6 @@ socket.on('joined', (data) => {
             </div>
           ` : ''}
           ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label"></div>` : isLifeDead ? `<div class="death-label"></div>` : ''}
           <div id="commanderTaxBadge" class="tax-badge">
             Tax:<br>
             <span class="tax-value">+${window.commanderTax}</span>
@@ -351,13 +360,6 @@ socket.on('joined', (data) => {
                   skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
                   container.appendChild(skull);
                 }
-
-                if (!container.querySelector('.death-label')) {
-                  const label = document.createElement('div');
-                  label.textContent = '☠ Poisoned';
-                  label.classList.add('death-label');
-                  container.appendChild(label);
-                }
               }
             }
           }
@@ -391,7 +393,6 @@ socket.on('joined', (data) => {
                class="commander-img" />
           ${!isDead ? `<div class="life-overlay">${p.life}</div>` : ''}
           ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label"></div>` : isLifeDead ? `<div class="death-label"></div>` : ''}
         </div>
       </div>
     `;
@@ -415,7 +416,6 @@ socket.on('joined', (data) => {
               class="commander-img" />
           ${(!isDead) ? `<div class="life-overlay">${p.life}</div>` : ''}
           ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          ${isPoisonDead ? `<div class="death-label"></div>` : ''}
         </div>
       </div>
     `;
