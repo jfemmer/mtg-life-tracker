@@ -186,19 +186,16 @@ const commitLifeChange = () => {
     socket.emit('updateLife', { life: myLife });
 
     if (myLife <= 0) {
-      const container = document.querySelector('.commander-container');
-      if (container) {
-        container.classList.add('dead');
+      socket.emit('updateLife', { life: myLife });
 
-        const lifeOverlay = container.querySelector('.life-overlay');
-        if (lifeOverlay) lifeOverlay.remove();
-
-        if (!container.querySelector('.skull-overlay')) {
-          const skull = document.createElement('div');
-          skull.classList.add('skull-overlay', 'your-skull');
-          container.appendChild(skull);
-        }
-      }
+      // Force refresh of UI to show death skull properly
+      const me = {
+        id: myId,
+        life: myLife,
+        commanderName,
+        commanderImage
+      };
+      socket.emit('players', { players: [me] }); // Optional, if you have a custom broadcast on server
     }
   }
 
