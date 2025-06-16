@@ -127,7 +127,11 @@ socket.on('joined', (data) => {
   const me = data.player;
   if (me) {
     window.commanderTax = window.commanderTax || 0;
-    window.poisonCount = window.poisonCount || 0;
+    if (me.poisonCount !== window.poisonCount) {
+      window.poisonCount = me.poisonCount;
+    } else {
+      return; // 🔥 Skip redraw if poison already updated locally
+    }
 
     const isPoisonDead = window.poisonCount >= 10;
     const isLifeDead = me.life <= 0;
@@ -268,9 +272,17 @@ const commitLifeChange = () => {
   const me = data.players.find(p => p.id === myId);
 
   if (me) {
-    myLife = me.life;
+    if (me.life !== myLife) {
+      myLife = me.life;
+    } else {
+      return; // 🔥 Skip DOM re-render if no life change
+    }
     window.commanderTax = window.commanderTax || 0;
-    window.poisonCount = window.poisonCount || 0;
+    if (me.poisonCount !== window.poisonCount) {
+      window.poisonCount = me.poisonCount;
+    } else {
+      return; // 🔥 Skip redraw if poison already updated locally
+    }
 
     const isPoisonDead = window.poisonCount >= 10;
     const isLifeDead = me.life <= 0;
