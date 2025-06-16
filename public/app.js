@@ -181,26 +181,26 @@ socket.on('joined', (data) => {
 const commitLifeChange = () => {
   const parsed = parseInt(lifeInput.value);
   if (!isNaN(parsed) && parsed >= 0) {
-    socket.emit('updateLife', { life: parsed });
+    myLife = parsed;
+    lifeDisplay.textContent = myLife;
 
-    // Instant DOM update before server reply
+    // 🔥 Immediate UI update
     const container = document.querySelector('.commander-container');
-    const isDead = parsed <= 0;
+    const isDead = myLife <= 0;
     if (container) {
       container.classList.toggle('dead', isDead);
 
-      const existingSkull = container.querySelector('.skull-overlay');
-      if (isDead && !existingSkull) {
-        const skull = document.createElement('div');
+      let skull = container.querySelector('.skull-overlay');
+      if (isDead && !skull) {
+        skull = document.createElement('div');
         skull.classList.add('skull-overlay', 'your-skull');
         container.appendChild(skull);
-      } else if (!isDead && existingSkull) {
-        existingSkull.remove();
+      } else if (!isDead && skull) {
+        skull.remove();
       }
     }
 
-    // Tell server after UI update
-    socket.emit('updateLife', { life: myLife });
+    socket.emit('updateLife', { life: myLife }); // Send to server
   }
 
   lifeInput.style.display = 'none';
@@ -222,30 +222,33 @@ const commitLifeChange = () => {
     const poisonDisplay = document.getElementById('poisonBadge');
     if (poisonBtn && poisonDisplay) {
       poisonBtn.onclick = () => {
-        if (window.poisonCount < 10) {
-          window.poisonCount += 1;
-          const poisonValue = poisonDisplay.querySelector('.poison-value');
-          if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+  if (window.poisonCount < 10) {
+    window.poisonCount += 1;
 
-          socket.emit('updatePoison', { poisonCount: window.poisonCount });
+    const poisonValue = poisonDisplay.querySelector('.poison-value');
+    if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
-          if (window.poisonCount >= 10) {
-            const container = document.querySelector('.commander-container');
-            if (container) {
-              container.classList.add('dead', 'poison-dead');
+    // 🔥 Immediate UI update
+    if (window.poisonCount >= 10) {
+      const container = document.querySelector('.commander-container');
+      if (container) {
+        container.classList.add('dead', 'poison-dead');
 
-              const lifeOverlay = container.querySelector('.life-overlay');
-              if (lifeOverlay) lifeOverlay.remove();
+        const lifeOverlay = container.querySelector('.life-overlay');
+        if (lifeOverlay) lifeOverlay.remove();
 
-              if (!container.querySelector('.skull-overlay')) {
-                const skull = document.createElement('div');
-                skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
-                container.appendChild(skull);
-              }
-            }
-          }
+        let skull = container.querySelector('.skull-overlay');
+        if (!skull) {
+          skull = document.createElement('div');
+          skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
+          container.appendChild(skull);
         }
-      };
+      }
+    }
+
+    socket.emit('updatePoison', { poisonCount: window.poisonCount });
+  }
+};
     }
 
     const taxBtn = document.getElementById('commanderTaxBtn');
