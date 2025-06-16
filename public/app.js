@@ -400,28 +400,6 @@ const commitLifeChange = () => {
 
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
 });
-
-  // Render other players
-  const commanderImgs = others.map(p => {
-    const isPoisonDead = Number(p.poisonCount) >= 10;
-    const isLifeDead = p.life <= 0;
-    const isDead = isLifeDead || isPoisonDead;
-
-    return `
-      <div class="commander-wrapper">
-        <div class="player-label">${p.name}</div>
-        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
-          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-              class="commander-img" />
-          ${(!isDead) ? `<div class="life-overlay">${p.life}</div>` : ''}
-          ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('otherCommanders').innerHTML = commanderImgs;
 };
 
 
