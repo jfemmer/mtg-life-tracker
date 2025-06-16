@@ -183,20 +183,25 @@ const commitLifeChange = () => {
   if (!isNaN(parsed) && parsed >= 0) {
     myLife = parsed;
     lifeDisplay.textContent = myLife;
-    socket.emit('updateLife', { life: myLife });
 
-    if (myLife <= 0) {
-      socket.emit('updateLife', { life: myLife });
+    // Instant DOM update before server reply
+    const container = document.querySelector('.commander-container');
+    const isDead = parsed <= 0;
+    if (container) {
+      container.classList.toggle('dead', isDead);
 
-      // Force refresh of UI to show death skull properly
-      const me = {
-        id: myId,
-        life: myLife,
-        commanderName,
-        commanderImage
-      };
-      socket.emit('players', { players: [me] }); // Optional, if you have a custom broadcast on server
+      const existingSkull = container.querySelector('.skull-overlay');
+      if (isDead && !existingSkull) {
+        const skull = document.createElement('div');
+        skull.classList.add('skull-overlay', 'your-skull');
+        container.appendChild(skull);
+      } else if (!isDead && existingSkull) {
+        existingSkull.remove();
+      }
     }
+
+    // Tell server after UI update
+    socket.emit('updateLife', { life: myLife });
   }
 
   lifeInput.style.display = 'none';
