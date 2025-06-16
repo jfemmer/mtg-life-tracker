@@ -257,7 +257,7 @@ const commitLifeChange = () => {
         if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
       };
     }
-  }, 100);
+  });
 });
 
   socket.on('players', (data) => {
@@ -373,7 +373,7 @@ const commitLifeChange = () => {
           if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
         };
       }
-    }, 100);
+    });
   }
 
   // Update other players’ commanders
@@ -503,7 +503,7 @@ async function handleJoinGame() {
     if (!alreadyVisible) {
       showGameScreen();
     }
-  }, 1000); // 1 second delay as buffer
+  }); // 1 second delay as buffer
 }
 
 function updateCommanderUI() {
