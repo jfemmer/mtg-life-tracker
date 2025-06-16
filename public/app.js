@@ -411,11 +411,25 @@ function changeLife(amount) {
 
   myLife = newLife;
 
-  // ✅ Instant UI update
   const lifeDisplay = document.getElementById('lifeDisplay');
   if (lifeDisplay) lifeDisplay.textContent = myLife;
 
-  // ✅ Emit to server
+  // 🔥 Instant visual death effect
+  const container = document.querySelector('.commander-container');
+  if (container) {
+    const isDead = myLife <= 0;
+    container.classList.toggle('dead', isDead);
+
+    let skull = container.querySelector('.skull-overlay');
+    if (isDead && !skull) {
+      skull = document.createElement('div');
+      skull.classList.add('skull-overlay', 'your-skull');
+      container.appendChild(skull);
+    } else if (!isDead && skull) {
+      skull.remove();
+    }
+  }
+
   socket.emit('updateLife', { life: myLife });
 }
 
