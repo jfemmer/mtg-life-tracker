@@ -386,16 +386,6 @@ function showGameScreen() {
     if (badge) badge.textContent = `Tax: $${window.commanderTax}`;
   };
 }
-
-const poisonBtn = document.getElementById('poisonCounterBtn');
-const poisonDisplay = document.getElementById('poisonBadge');
-if (poisonBtn && poisonDisplay) {
-  poisonBtn.onclick = () => {
-    window.poisonCount = (window.poisonCount || 0) + 1;
-    const poisonValue = poisonDisplay.querySelector('.poison-value');
-    if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
-  };
-}
     
   }
 
