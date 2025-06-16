@@ -317,20 +317,20 @@ const commitLifeChange = () => {
       });
 
       const commitLifeChange = () => {
-        const parsed = parseInt(lifeInput.value);
-        if (!isNaN(parsed) && parsed >= 0) {
-          myLife = parsed;
-          lifeDisplay.textContent = myLife;
-          socket.emit('updateLife', { life: myLife });
-        }
-        lifeInput.style.display = 'none';
-        lifeDisplay.style.display = 'inline';
-      };
+      const parsed = parseInt(lifeInput.value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        myLife = parsed;
 
-      lifeInput.addEventListener('blur', commitLifeChange);
-      lifeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') commitLifeChange();
-      });
+        // Immediately update the text for responsiveness
+        lifeDisplay.textContent = myLife;
+
+        // Trigger full re-render from server broadcast
+        socket.emit('updateLife', { life: myLife });
+      }
+
+      lifeInput.style.display = 'none';
+      lifeDisplay.style.display = 'inline';
+    };
     }
 
     // Rebind poison and tax buttons
