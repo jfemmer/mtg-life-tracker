@@ -158,6 +158,8 @@ socket.on('joined', (data) => {
       </div>
     `;
 
+    bindButtons();
+
     const leftZone = document.querySelector('.click-zone.left');
     const rightZone = document.querySelector('.click-zone.right');
     if (leftZone) leftZone.addEventListener('click', () => changeLife(-1));
@@ -459,6 +461,50 @@ function updateCommanderUI() {
     }
     const skull = container.querySelector('.skull-overlay');
     if (skull) skull.remove();
+  }
+}
+
+function bindButtons() {
+  const poisonBtn = document.getElementById('poisonCounterBtn');
+  const poisonDisplay = document.getElementById('poisonBadge');
+  if (poisonBtn && poisonDisplay) {
+    poisonBtn.onclick = () => {
+      if (window.poisonCount < 10) {
+        window.poisonCount += 1;
+
+        const poisonValue = poisonDisplay.querySelector('.poison-value');
+        if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+
+        if (window.poisonCount >= 10) {
+          const container = document.querySelector('.commander-container');
+          if (container) {
+            container.classList.add('dead', 'poison-dead');
+
+            const lifeOverlay = container.querySelector('.life-overlay');
+            if (lifeOverlay) lifeOverlay.remove();
+
+            let skull = container.querySelector('.skull-overlay');
+            if (!skull) {
+              skull = document.createElement('div');
+              skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
+              container.appendChild(skull);
+            }
+          }
+        }
+
+        socket.emit('updatePoison', { poisonCount: window.poisonCount });
+      }
+    };
+  }
+
+  const taxBtn = document.getElementById('commanderTaxBtn');
+  const taxDisplay = document.getElementById('commanderTaxBadge');
+  if (taxBtn && taxDisplay) {
+    taxBtn.onclick = () => {
+      window.commanderTax += 2;
+      const taxValue = taxDisplay.querySelector('.tax-value');
+      if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
+    };
   }
 }
 
