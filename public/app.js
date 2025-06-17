@@ -217,50 +217,51 @@ const commitLifeChange = () => {
 
   showGameScreen();
 
-  setTimeout(() => {
-    const poisonBtn = document.getElementById('poisonCounterBtn');
-    const poisonDisplay = document.getElementById('poisonBadge');
-    if (poisonBtn && poisonDisplay) {
-      poisonBtn.onclick = () => {
-  if (window.poisonCount < 10) {
-    window.poisonCount += 1;
+setTimeout(() => {
+  // Poison button handler
+  const poisonBtn = document.getElementById('poisonCounterBtn');
+  const poisonDisplay = document.getElementById('poisonBadge');
+  if (poisonBtn && poisonDisplay) {
+    poisonBtn.onclick = () => {
+      if (window.poisonCount < 10) {
+        window.poisonCount += 1;
 
-    const poisonValue = poisonDisplay.querySelector('.poison-value');
-    if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+        const poisonValue = poisonDisplay.querySelector('.poison-value');
+        if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
-    // 🔥 Immediate UI update
-    if (window.poisonCount >= 10) {
-      const container = document.querySelector('.commander-container');
-      if (container) {
-        container.classList.add('dead', 'poison-dead');
+        if (window.poisonCount >= 10) {
+          const container = document.querySelector('.commander-container');
+          if (container) {
+            container.classList.add('dead', 'poison-dead');
 
-        const lifeOverlay = container.querySelector('.life-overlay');
-        if (lifeOverlay) lifeOverlay.remove();
+            const lifeOverlay = container.querySelector('.life-overlay');
+            if (lifeOverlay) lifeOverlay.remove();
 
-        let skull = container.querySelector('.skull-overlay');
-        if (!skull) {
-          skull = document.createElement('div');
-          skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
-          container.appendChild(skull);
+            let skull = container.querySelector('.skull-overlay');
+            if (!skull) {
+              skull = document.createElement('div');
+              skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
+              container.appendChild(skull);
+            }
+          }
         }
+
+        socket.emit('updatePoison', { poisonCount: window.poisonCount });
       }
-    }
-
-    socket.emit('updatePoison', { poisonCount: window.poisonCount });
+    };
   }
-};
-    }
 
-    const taxBtn = document.getElementById('commanderTaxBtn');
-    const taxDisplay = document.getElementById('commanderTaxBadge');
-    if (taxBtn && taxDisplay) {
-      taxBtn.onclick = () => {
-        window.commanderTax += 2;
-        const taxValue = taxDisplay.querySelector('.tax-value');
-        if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
-      };
-    }
-  });
+  // Commander tax button handler
+  const taxBtn = document.getElementById('commanderTaxBtn');
+  const taxDisplay = document.getElementById('commanderTaxBadge');
+  if (taxBtn && taxDisplay) {
+    taxBtn.onclick = () => {
+      window.commanderTax += 2;
+      const taxValue = taxDisplay.querySelector('.tax-value');
+      if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
+    };
+  }
+}, 100); // short delay to ensure DOM is ready
 });
 
 socket.on('players', (data) => {
