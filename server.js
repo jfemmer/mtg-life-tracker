@@ -34,38 +34,48 @@ io.on('connection', (socket) => {
   let gameCode = null;
   const playerId = nanoid();
 
-  socket.on('create', () => {
-    gameCode = nanoid(6).toUpperCase();
-    games[gameCode] = { players: [] };
-    socket.emit('gameCreated', { gameCode });
-  });
+  const allColors = [
+  '#FF6B6B', '#4ECDC4', '#FFD93D', '#1A8FE3', '#A259FF',
+  '#00C851', '#FF8800', '#FF66CC', '#33B5E5', '#AA66CC',
+  '#669900', '#FF4444', '#0099CC', '#9933CC'
+];
+
+socket.on('create', () => {
+  gameCode = nanoid(6).toUpperCase();
+  games[gameCode] = {
+    players: [],
+    availableColors: [...allColors] // clone initial color pool
+  };
+  socket.emit('gameCreated', { gameCode });
+});
 
 socket.on('join', ({ gameCode: code, name, commanderName, commanderImage }) => {
   gameCode = code;
+  const game = games[gameCode];
 
-  
-function getRandomColor() {
-  const colors = ['#FF6B6B', '#4ECDC4', '#FFD93D', '#1A8FE3', '#A259FF', '#00C851', '#FF8800'];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
+  if (!game) return;
 
-const player = {
-  id: playerId,
-  name,
-  life: 40,
-  commanderName,
-  commanderImage,
-  poisonCount: 0,
-  commanderTax: 0,
-  color: getRandomColor()
-};
+  // Pick a random color from the pool and remove it
+  const pool = game.availableColors;
+  const randomIndex = Math.floor(Math.random() * pool.length);
+  const assignedColor = pool.splice(randomIndex, 1)[0] || '#FFFFFF';
 
-  if (!games[gameCode]) games[gameCode] = { players: [] };
-  games[gameCode].players.push(player);
+  const player = {
+    id: playerId,
+    name,
+    life: 40,
+    commanderName,
+    commanderImage,
+    poisonCount: 0,
+    commanderTax: 0,
+    color: assignedColor
+  };
+
+  game.players.push(player);
 
   socket.join(gameCode);
   socket.emit('joined', { playerId, gameCode, player });
-  io.to(gameCode).emit('players', { players: games[gameCode].players });
+  io.to(gameCode).emit('players', { players: game.players });
 });
 
 socket.on('updateLife', ({ life }) => {
