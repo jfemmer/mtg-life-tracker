@@ -341,18 +341,18 @@ socket.on('players', (data) => {
     const isDead = isPoisonDead || isLifeDead;
 
     return `
-      <div class="commander-wrapper">
-        <div class="player-label">${p.name}</div>
-        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
-          <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
-               title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
-               class="commander-img" />
-          ${!isDead ? `<div class="life-overlay">${p.life}</div>` : ''}
-          ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-        </div>
+    <div class="commander-wrapper">
+      <div class="player-label">${p.name}</div>
+      <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}" style="--player-color: ${p.color}; border: 3px solid var(--player-color);">
+        <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
+             title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
+             class="commander-img" />
+        ${!isDead ? `<div class="life-overlay">${p.life}</div>` : ''}
+        ${isDead ? `<div class="skull-overlay${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
       </div>
-    `;
-  }).join('');
+    </div>
+  `;
+}).join('');
 
   document.getElementById('otherCommanders').innerHTML = commanderImgs;
 });
