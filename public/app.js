@@ -31,15 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (rightZone) rightZone.onclick = () => changeLife(1);
 }, 50);
 
-  document.getElementById('resetBtn').onclick = () => {
-    if (confirm('Are you sure you want to reset all life, poison, and tax?')) {
-      socket.emit('resetGame');
-      myLife = 40;
-      window.commanderTax = 0;
-      window.poisonCount = 0;
-      updateCommanderUI();
-    }
-  };
+document.getElementById('resetBtn').onclick = () => {
+  if (confirm('Are you sure you want to reset all life, poison, and tax?')) {
+    socket.emit('resetGame');
+    myLife = 40;
+    window.commanderTax = 0;
+    window.poisonCount = 0;
+
+    updateCommanderUI(); // for immediate local UI refresh
+    setTimeout(() => bindButtons(), 150); // just in case of async DOM updates
+  }
+};
+
   document.getElementById('commanderName').addEventListener('input', async (e) => {
   const query = e.target.value.trim();
   const dropdown = document.getElementById('commanderDropdown');
@@ -273,13 +276,21 @@ socket.on('players', (data) => {
   // Only re-render your own commander UI if needed
   const shouldUpdateSelf =
     me &&
-    (me.life !== myLife || me.poisonCount !== window.poisonCount);
+    (me.life !== myLife ||
+     me.poisonCount !== window.poisonCount ||
+     me.commanderTax !== window.commanderTax);
 
   if (me) {
     myLife = me.life;
     window.poisonCount = me.poisonCount;
-    window.commanderTax = window.commanderTax || 0;
+    if (typeof me.commanderTax === 'number') {
+      window.commanderTax = me.commanderTax;
+      const taxValue = document.querySelector('.tax-value');
+      if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
 
+      const poisonValue = document.querySelector('.poison-value');
+      if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+    }
     const isPoisonDead = window.poisonCount >= 10;
     const isLifeDead = myLife <= 0;
     const isDead = isPoisonDead || isLifeDead;
@@ -312,11 +323,14 @@ socket.on('players', (data) => {
         </div>
       `;
 
-      // Rebind all your UI interactions
+      // Rebind click zones
       const leftZone = document.querySelector('.click-zone.left');
       const rightZone = document.querySelector('.click-zone.right');
       if (leftZone) leftZone.addEventListener('click', () => changeLife(-1));
       if (rightZone) rightZone.addEventListener('click', () => changeLife(1));
+
+      // ✅ Rebind poison/tax buttons
+      setTimeout(bindButtons, 50);
     }
   }
 
@@ -446,29 +460,107 @@ function updateCommanderUI() {
   const lifeDisplay = document.getElementById('lifeDisplay');
   if (lifeDisplay) lifeDisplay.textContent = myLife;
 
-  const taxValue = document.querySelector('.tax-value');
-  if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
-
   const poisonValue = document.querySelector('.poison-value');
   if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
   const container = document.querySelector('.commander-container');
   if (container) {
-    container.classList.remove('dead');
-    if (!document.querySelector('.life-overlay')) {
-      const overlay = document.createElement('div');
-      overlay.classList.add('life-overlay');
-      overlay.textContent = myLife;
-      container.appendChild(overlay);
-    }
+    // 🧼 Reset container state
+    container.classList.remove('dead', 'poison-dead');
+
+    // 🧼 Remove skull overlay if it exists
     const skull = container.querySelector('.skull-overlay');
     if (skull) skull.remove();
+
+    // 🧼 Remove and re-add life overlay
+    const oldLifeOverlay = container.querySelector('.life-overlay');
+    if (oldLifeOverlay) oldLifeOverlay.remove();
+
+    const newOverlay = document.createElement('div');
+    newOverlay.classList.add('life-overlay');
+    newOverlay.id = 'lifeOverlay';
+    newOverlay.innerHTML = `
+      <span id="lifeDisplay">${myLife}</span>
+      <input type="number" id="lifeInput" class="life-input" inputmode="numeric" pattern="[0-9]*" style="display: none;" />
+    `;
+    container.appendChild(newOverlay);
+
+    // 🧼 Update or create commander tax badge
+    let taxBadge = document.getElementById('commanderTaxBadge');
+    if (!taxBadge) {
+      taxBadge = document.createElement('div');
+      taxBadge.id = 'commanderTaxBadge';
+      taxBadge.classList.add('tax-badge');
+      container.appendChild(taxBadge);
+    }
+    taxBadge.innerHTML = `Tax:<br><span class="tax-value">+${window.commanderTax}</span>`;
+
+    // 🧼 Update poison badge
+    let poisonBadge = document.getElementById('poisonBadge');
+    if (!poisonBadge) {
+      poisonBadge = document.createElement('div');
+      poisonBadge.id = 'poisonBadge';
+      poisonBadge.classList.add('tax-badge', 'poison-badge');
+      container.appendChild(poisonBadge);
+    }
+    poisonBadge.innerHTML = `Poison:<br><span class="poison-value">${window.poisonCount}</span>`;
+
+    // Rebind editable life input
+    setTimeout(() => {
+      const lifeOverlay = document.getElementById('lifeOverlay');
+      const lifeDisplay = document.getElementById('lifeDisplay');
+      const lifeInput = document.getElementById('lifeInput');
+
+      if (lifeOverlay && lifeDisplay && lifeInput) {
+        lifeOverlay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          lifeInput.value = myLife;
+          lifeDisplay.style.display = 'none';
+          lifeInput.style.display = 'inline';
+          lifeInput.focus();
+          lifeInput.select();
+        });
+
+        const commitLifeChange = () => {
+          const parsed = parseInt(lifeInput.value);
+          if (!isNaN(parsed) && parsed >= 0) {
+            myLife = parsed;
+            lifeDisplay.textContent = myLife;
+            socket.emit('updateLife', { life: myLife });
+
+            const isDead = myLife <= 0;
+            container.classList.toggle('dead', isDead);
+
+            const existingSkull = container.querySelector('.skull-overlay');
+            if (isDead && !existingSkull) {
+              const skull = document.createElement('div');
+              skull.classList.add('skull-overlay', 'your-skull');
+              container.appendChild(skull);
+            } else if (!isDead && existingSkull) {
+              existingSkull.remove();
+            }
+          }
+
+          lifeInput.style.display = 'none';
+          lifeDisplay.style.display = 'inline';
+        };
+
+        lifeInput.addEventListener('blur', commitLifeChange);
+        lifeInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            commitLifeChange();
+          }
+        });
+      }
+    }, 100);
   }
+  bindButtons();
 }
 
 function bindButtons() {
   const poisonBtn = document.getElementById('poisonCounterBtn');
   const poisonDisplay = document.getElementById('poisonBadge');
+
   if (poisonBtn && poisonDisplay) {
     poisonBtn.onclick = () => {
       if (window.poisonCount < 10) {
@@ -501,11 +593,14 @@ function bindButtons() {
 
   const taxBtn = document.getElementById('commanderTaxBtn');
   const taxDisplay = document.getElementById('commanderTaxBadge');
+
   if (taxBtn && taxDisplay) {
     taxBtn.onclick = () => {
       window.commanderTax += 2;
       const taxValue = taxDisplay.querySelector('.tax-value');
       if (taxValue) taxValue.textContent = `+${window.commanderTax}`;
+
+      socket.emit('updateTax', { commanderTax: window.commanderTax });
     };
   }
 }
