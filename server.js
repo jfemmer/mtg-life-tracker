@@ -42,6 +42,13 @@ io.on('connection', (socket) => {
 
 socket.on('join', ({ gameCode: code, name, commanderName, commanderImage }) => {
   gameCode = code;
+
+  
+function getRandomColor() {
+  const colors = ['#FF6B6B', '#4ECDC4', '#FFD93D', '#1A8FE3', '#A259FF', '#00C851', '#FF8800'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
 const player = {
   id: playerId,
   name,
@@ -49,7 +56,8 @@ const player = {
   commanderName,
   commanderImage,
   poisonCount: 0,
-  commanderTax: 0
+  commanderTax: 0,
+  color: getRandomColor()
 };
 
   if (!games[gameCode]) games[gameCode] = { players: [] };
