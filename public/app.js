@@ -136,6 +136,8 @@ socket.on('joined', (data) => {
     const isLifeDead = me.life <= 0;
     const isDead = isLifeDead || isPoisonDead;
 
+    const playerColor = me.color || '#ffffff';
+
     document.getElementById('yourCommander').innerHTML = `
       <div class="commander-spotlight">
         <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
@@ -336,14 +338,16 @@ socket.on('players', (data) => {
 
   // ✅ Always update other players’ commanders
   const commanderImgs = others.map(p => {
-    const isPoisonDead = Number(p.poisonCount) >= 10;
-    const isLifeDead = p.life <= 0;
-    const isDead = isPoisonDead || isLifeDead;
+  const isPoisonDead = Number(p.poisonCount) >= 10;
+  const isLifeDead = p.life <= 0;
+  const isDead = isPoisonDead || isLifeDead;
+  const playerColor = p.color || '#ffffff'; // fallback
 
-    return `
+  return `
     <div class="commander-wrapper">
-      <div class="player-label">${p.name}</div>
-      <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}" style="--player-color: ${p.color}; border: 3px solid var(--player-color);">
+      <div class="player-label" style="color: ${playerColor};">${p.name}</div>
+      <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}"
+           style="--player-color: ${playerColor}; border: 3px solid var(--player-color);">
         <img src="${p.commanderImage}" alt="${p.commanderName || 'Commander'}"
              title="${p.name}: ${p.commanderName || 'Unknown Commander'}"
              class="commander-img" />
