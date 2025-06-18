@@ -401,12 +401,12 @@ async function handleCreateGame() {
     return;
   }
 
-  isHost = true; // 👈 THIS LINE SETS THE HOST
+  isHost = true; // 👈 this player is the host
 
   commanderImage = await fetchCommanderImage(commanderName);
 
-  const isLocal = location.hostname === 'localhost';
-  socket = io(isLocal ? 'http://localhost:5500' : 'https://mtg-life-tracker-production.up.railway.app');
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  socket = io(isLocal ? 'http://localhost:3000' : 'https://mtg-life-tracker-production.up.railway.app');
   setupSocket(playerName, commanderName, commanderImage);
   socket.emit('create');
 }
@@ -423,8 +423,8 @@ async function handleJoinGame() {
 
   commanderImage = await fetchCommanderImage(commanderName);
 
-  const isLocal = location.hostname === 'localhost';
-  socket = io(isLocal ? 'http://localhost:5500' : 'https://mtg-life-tracker-production.up.railway.app');
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  socket = io(isLocal ? 'http://localhost:3000' : 'https://mtg-life-tracker-production.up.railway.app');
   setupSocket(playerName, commanderName, commanderImage);
   socket.emit('join', {
     gameCode,
