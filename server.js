@@ -6,7 +6,11 @@ import { nanoid } from 'nanoid';
 
 const app = express();
 app.use(cors({
-  origin: ['https://jfemmer.github.io'],
+  origin: [
+    'https://jfemmer.github.io',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+  ],
   methods: ['GET', 'POST'],
   credentials: true
 }));
