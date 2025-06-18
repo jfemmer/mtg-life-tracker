@@ -18,7 +18,11 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['https://jfemmer.github.io'],
+    origin: [
+      'https://jfemmer.github.io',
+      'http://localhost:5500',
+      'http://127.0.0.1:5500'
+    ],
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -38,14 +42,15 @@ io.on('connection', (socket) => {
 
 socket.on('join', ({ gameCode: code, name, commanderName, commanderImage }) => {
   gameCode = code;
-  const player = {
-    id: playerId,
-    name,
-    life: 40,
-    commanderName,
-    commanderImage,
-    poisonCount: 0
-  };
+const player = {
+  id: playerId,
+  name,
+  life: 40,
+  commanderName,
+  commanderImage,
+  poisonCount: 0,
+  commanderTax: 0
+};
 
   if (!games[gameCode]) games[gameCode] = { players: [] };
   games[gameCode].players.push(player);
@@ -65,6 +70,16 @@ socket.on('updateLife', ({ life }) => {
   }
 });
 
+  socket.on('updateTax', ({ commanderTax }) => {
+    const game = games[gameCode];
+    if (!game) return;
+    const player = game.players.find(p => p.id === playerId);
+    if (player) {
+      player.commanderTax = commanderTax;
+      io.to(gameCode).emit('players', { players: game.players });
+    }
+  });
+
 socket.on('updatePoison', ({ poisonCount }) => {
   const game = games[gameCode];
   if (!game) return;
@@ -79,11 +94,11 @@ socket.on('resetGame', () => {
   const game = games[gameCode];
   if (!game) return;
 
-  for (const player of game.players) {
-    player.life = 40;
-    player.poisonCount = 0;
-    // You can extend this if you later track commanderTax on server
-  }
+ for (const player of game.players) {
+  player.life = 40;
+  player.poisonCount = 0;
+  player.commanderTax = 0;
+}
 
   io.to(gameCode).emit('players', { players: game.players });
 });
