@@ -138,30 +138,26 @@ socket.on('joined', (data) => {
 
     const playerColor = me.color || '#ffffff';
 
-    document.getElementById('yourCommander').innerHTML = `
-      <div class="commander-spotlight">
-        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
-          <div class="clickable-overlay">
-            <div class="click-zone left"></div>
-            <div class="click-zone right"></div>
-            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
-          </div>
-          ${!isDead ? `<div class="life-overlay" id="lifeOverlay">
-            <span id="lifeDisplay">${me.life}</span>
-            <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
-          </div>` : ''}
-          ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
-          <div id="commanderTaxBadge" class="tax-badge">
-            Tax:<br>
-            <span class="tax-value">+${window.commanderTax}</span>
-          </div>
-          <div id="poisonBadge" class="tax-badge poison-badge">
-            Poison:<br>
-            <span class="poison-value">${window.poisonCount}</span>
-          </div>
-        </div>
-      </div>
-    `;
+    const commanderDamageHTML = others.map(p => `
+  <div class="commander-damage-entry" style="border-left: 6px solid ${p.color}; padding-left: 6px; margin-bottom: 6px; display: flex; align-items: center;">
+    <img src="${p.commanderImage}" alt="${p.commanderName}" style="width: 30px; height: auto; border-radius: 4px; margin-right: 6px;" />
+    <span style="color: ${p.color};">${p.name}</span>
+    <input type="number" min="0" max="21" value="0"
+      style="margin-left: auto; width: 48px; padding: 2px; text-align: center; border-radius: 4px; border: 1px solid #999;" />
+  </div>
+`).join('');
+
+document.getElementById('yourCommander').innerHTML = `
+  <div class="commander-spotlight">
+    <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
+      ...
+    </div>
+    <div class="commander-damage-wrapper">
+      <h4 style="color: #fff; margin: 8px 0 4px;">Commander Damage</h4>
+      ${commanderDamageHTML}
+    </div>
+  </div>
+`;
 
     bindButtons();
 
@@ -191,11 +187,16 @@ const commitLifeChange = () => {
     myLife = parsed;
     lifeDisplay.textContent = myLife;
 
-    // 🔥 Immediate UI update
     const container = document.querySelector('.commander-container');
     const isDead = myLife <= 0;
+
     if (container) {
       container.classList.toggle('dead', isDead);
+
+      const lifeOverlay = container.querySelector('.life-overlay');
+      if (isDead && lifeOverlay) {
+        lifeOverlay.remove(); // 🔥 Remove life total on death
+      }
 
       let skull = container.querySelector('.skull-overlay');
       if (isDead && !skull) {
@@ -207,7 +208,7 @@ const commitLifeChange = () => {
       }
     }
 
-    socket.emit('updateLife', { life: myLife }); // Send to server
+    socket.emit('updateLife', { life: myLife });
   }
 
   lifeInput.style.display = 'none';
@@ -226,37 +227,36 @@ const commitLifeChange = () => {
 
 setTimeout(() => {
   // Poison button handler
-  const poisonBtn = document.getElementById('poisonCounterBtn');
-  const poisonDisplay = document.getElementById('poisonBadge');
-  if (poisonBtn && poisonDisplay) {
-    poisonBtn.onclick = () => {
-      if (window.poisonCount < 10) {
-        window.poisonCount += 1;
+const poisonDisplay = document.getElementById('poisonBadge');
+if (poisonDisplay) {
+  poisonDisplay.onclick = () => {
+    if (window.poisonCount < 10) {
+      window.poisonCount += 1;
 
-        const poisonValue = poisonDisplay.querySelector('.poison-value');
-        if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
+      const poisonValue = poisonDisplay.querySelector('.poison-value');
+      if (poisonValue) poisonValue.textContent = `${window.poisonCount}`;
 
-        if (window.poisonCount >= 10) {
-          const container = document.querySelector('.commander-container');
-          if (container) {
-            container.classList.add('dead', 'poison-dead');
+      if (window.poisonCount >= 10) {
+        const container = document.querySelector('.commander-container');
+        if (container) {
+          container.classList.add('dead', 'poison-dead');
 
-            const lifeOverlay = container.querySelector('.life-overlay');
-            if (lifeOverlay) lifeOverlay.remove();
+          const lifeOverlay = container.querySelector('.life-overlay');
+          if (lifeOverlay) lifeOverlay.remove();
 
-            let skull = container.querySelector('.skull-overlay');
-            if (!skull) {
-              skull = document.createElement('div');
-              skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
-              container.appendChild(skull);
-            }
+          let skull = container.querySelector('.skull-overlay');
+          if (!skull) {
+            skull = document.createElement('div');
+            skull.classList.add('skull-overlay', 'your-skull', 'poison-skull');
+            container.appendChild(skull);
           }
         }
-
-        socket.emit('updatePoison', { poisonCount: window.poisonCount });
       }
-    };
-  }
+
+      socket.emit('updatePoison', { poisonCount: window.poisonCount });
+    }
+  };
+}
 
   // Commander tax button handler
   const taxBtn = document.getElementById('commanderTaxBtn');
@@ -372,11 +372,15 @@ function changeLife(amount) {
   const lifeDisplay = document.getElementById('lifeDisplay');
   if (lifeDisplay) lifeDisplay.textContent = myLife;
 
-  // 🔥 Instant visual death effect
   const container = document.querySelector('.commander-container');
   if (container) {
     const isDead = myLife <= 0;
     container.classList.toggle('dead', isDead);
+
+    const lifeOverlay = container.querySelector('.life-overlay');
+    if (isDead && lifeOverlay) {
+      lifeOverlay.remove(); // 🔥 REMOVE LIFE DISPLAY
+    }
 
     let skull = container.querySelector('.skull-overlay');
     if (isDead && !skull) {
@@ -526,28 +530,33 @@ function updateCommanderUI() {
         });
 
         const commitLifeChange = () => {
-          const parsed = parseInt(lifeInput.value);
-          if (!isNaN(parsed) && parsed >= 0) {
-            myLife = parsed;
-            lifeDisplay.textContent = myLife;
-            socket.emit('updateLife', { life: myLife });
+        const parsed = parseInt(lifeInput.value);
+        if (!isNaN(parsed) && parsed >= 0) {
+          myLife = parsed;
+          lifeDisplay.textContent = myLife;
+          socket.emit('updateLife', { life: myLife });
 
-            const isDead = myLife <= 0;
-            container.classList.toggle('dead', isDead);
+          const isDead = myLife <= 0;
+          container.classList.toggle('dead', isDead);
 
-            const existingSkull = container.querySelector('.skull-overlay');
-            if (isDead && !existingSkull) {
-              const skull = document.createElement('div');
-              skull.classList.add('skull-overlay', 'your-skull');
-              container.appendChild(skull);
-            } else if (!isDead && existingSkull) {
-              existingSkull.remove();
-            }
+          const lifeOverlay = container.querySelector('.life-overlay');
+          if (isDead && lifeOverlay) {
+            lifeOverlay.remove(); // 💥 Remove life total display
           }
 
-          lifeInput.style.display = 'none';
-          lifeDisplay.style.display = 'inline';
-        };
+          const existingSkull = container.querySelector('.skull-overlay');
+          if (isDead && !existingSkull) {
+            const skull = document.createElement('div');
+            skull.classList.add('skull-overlay', 'your-skull');
+            container.appendChild(skull);
+          } else if (!isDead && existingSkull) {
+            existingSkull.remove();
+          }
+        }
+
+        lifeInput.style.display = 'none';
+        lifeDisplay.style.display = 'inline';
+      };
 
         lifeInput.addEventListener('blur', commitLifeChange);
         lifeInput.addEventListener('keydown', (e) => {
