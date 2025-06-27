@@ -138,26 +138,30 @@ socket.on('joined', (data) => {
 
     const playerColor = me.color || '#ffffff';
 
-    const commanderDamageHTML = others.map(p => `
-  <div class="commander-damage-entry" style="border-left: 6px solid ${p.color}; padding-left: 6px; margin-bottom: 6px; display: flex; align-items: center;">
-    <img src="${p.commanderImage}" alt="${p.commanderName}" style="width: 30px; height: auto; border-radius: 4px; margin-right: 6px;" />
-    <span style="color: ${p.color};">${p.name}</span>
-    <input type="number" min="0" max="21" value="0"
-      style="margin-left: auto; width: 48px; padding: 2px; text-align: center; border-radius: 4px; border: 1px solid #999;" />
-  </div>
-`).join('');
-
-document.getElementById('yourCommander').innerHTML = `
-  <div class="commander-spotlight">
-    <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
-      ...
-    </div>
-    <div class="commander-damage-wrapper">
-      <h4 style="color: #fff; margin: 8px 0 4px;">Commander Damage</h4>
-      ${commanderDamageHTML}
-    </div>
-  </div>
-`;
+    document.getElementById('yourCommander').innerHTML = `
+      <div class="commander-spotlight">
+        <div class="commander-container${isDead ? ' dead' : ''}${isPoisonDead ? ' poison-dead' : ''}">
+          <div class="clickable-overlay">
+            <div class="click-zone left"></div>
+            <div class="click-zone right"></div>
+            <img src="${me.commanderImage}" alt="${me.commanderName}" class="commander-img" />
+          </div>
+          ${!isDead ? `<div class="life-overlay" id="lifeOverlay">
+            <span id="lifeDisplay">${me.life}</span>
+            <input type="number" id="lifeInput" style="display: none;" inputmode="numeric" />
+          </div>` : ''}
+          ${isDead ? `<div class="skull-overlay your-skull${isPoisonDead ? ' poison-skull' : ''}"></div>` : ''}
+          <div id="commanderTaxBadge" class="tax-badge">
+            Tax:<br>
+            <span class="tax-value">+${window.commanderTax}</span>
+          </div>
+          <div id="poisonBadge" class="tax-badge poison-badge">
+            Poison:<br>
+            <span class="poison-value">${window.poisonCount}</span>
+          </div>
+        </div>
+      </div>
+    `;
 
     bindButtons();
 
